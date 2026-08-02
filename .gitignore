@@ -1,0 +1,22 @@
+# Internal working context
+docs/SESSION.md
+
+# macOS metadata
+.DS_Store
+
+# Secrets and machine-local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.token
+secrets/
+credentials/
+
+# Local logs and captures
+*.log
+captures/
