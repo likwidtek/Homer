@@ -9,9 +9,10 @@ Homer is currently in product design. It is not yet installable and no applicati
 ## Direction for v0.1
 
 - Browser-only phone client; no required native iPhone or Android app.
-- One paired local machine with keyboard and trackpad/mouse input.
-- Explicit phone-to-machine text transfer and convenient machine-to-phone clipboard retrieval, within browser limitations.
-- Restart, graceful shutdown, and sleep.
+- One local target machine, with multiple revocable paired phones but one active control session.
+- Native phone text entry, common special keys, and trackpad/mouse input with left, middle, right click, two-finger scrolling, and two-finger right click.
+- Explicit phone-to-machine text transfer and consented, text-only machine-to-phone clipboard retrieval. Homer keeps no clipboard history, logs, analytics, or background synchronization.
+- Restart, graceful shutdown, and sleep with deliberate confirmation; restart and shutdown are cancellable.
 - QR pairing with short-lived bootstrap, local target approval, and revocable phone credentials.
 - Decky-first installation through GitHub releases, bootstrapping an agent that remains functional if Decky later fails.
 - Bazzite and SteamOS as required initial targets, with Bazzite-first hands-on testing and direct SteamOS validation before release claims.
@@ -21,6 +22,8 @@ Homer is currently in product design. It is not yet installable and no applicati
 Homer is local-network-only. It has no accounts, cloud relays, remote internet access, or Homer-collected telemetry. The project may use aggregate repository traffic and release-download counts supplied by distribution platforms; those are not install or active-user metrics.
 
 The phone client will never provide arbitrary shell or terminal access. Privileged behavior, if needed, is limited to fixed, audited, deliberately confirmed actions. The normal agent aims to run rootlessly; required permissions remain to be validated.
+
+v0.1 uses bearer-authorized HTTP/WebSockets only on a trusted home LAN; it is not encrypted transport. Users must never port-forward or otherwise expose Homer to the internet. See the [security and connection model](docs/SECURITY.md).
 
 ## Not in v0.1
 
@@ -32,7 +35,7 @@ The phone client will never provide arbitrary shell or terminal access. Privileg
 - Windows support
 - An official Decky Plugin Store listing
 
-See [the product direction](docs/PRODUCT.md), [recorded decisions](docs/DECISIONS.md), and [roadmap](docs/ROADMAP.md) for details.
+See [the product direction](docs/PRODUCT.md), [v0.1 interaction model](docs/INTERACTION.md), [security and connection model](docs/SECURITY.md), [recorded decisions](docs/DECISIONS.md), and [roadmap](docs/ROADMAP.md) for details.
 
 ## Publishing safety
 

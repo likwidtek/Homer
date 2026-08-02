@@ -46,4 +46,4 @@ Before a push, confirm:
 
 Keep the repository public and enable GitHub Secret Protection, including secret scanning and push protection. Enable Dependabot alerts and code scanning once the project contains dependencies and application code. Do not rely on these services as the only defense.
 
-Before accepting contributors, add a `SECURITY.md`, configure private vulnerability reporting, publish `CONTRIBUTING.md` with DCO sign-off, and protect `main` with an appropriate review and CI policy.
+Before accepting contributors, add a vulnerability-reporting policy to `SECURITY.md`, configure private vulnerability reporting, publish `CONTRIBUTING.md` with DCO sign-off, and protect `main` with an appropriate review and CI policy.

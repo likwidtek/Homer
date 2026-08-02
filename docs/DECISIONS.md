@@ -39,12 +39,12 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Decision:** SteamOS and Bazzite are required initial targets. Begin hands-on testing on the project owner’s Bazzite machine, then validate SteamOS directly before making v0.1 compatibility claims.
 - **Rationale:** Bazzite is immediately available for testing; SteamOS is an intended initial target.
 
-## D-006 — Single-machine v0.1; multi-machine later
+## D-006 — Single target machine in v0.1; multi-machine later
 
 - **Status:** Accepted
 - **Date:** 2026-08-01
-- **Decision:** v0.1 supports one actively paired and controlled machine. Its architecture must not preclude multi-machine support, which is required in a later release.
-- **Rationale:** This keeps v0.1 focused on a reliable single-machine experience while preserving a credible path to later multi-machine use and Wake-on-LAN relays.
+- **Decision:** v0.1 manages one target machine. Multiple phones may pair, but only one may actively control that target at a time; the architecture must not preclude multi-machine support, which is required in a later release.
+- **Rationale:** This keeps v0.1 focused on a reliable single-machine experience while accommodating a household and preserving a credible path to later multi-machine use and Wake-on-LAN relays.
 
 ## D-007 — v0.1 power actions
 
@@ -126,7 +126,7 @@ These records capture consequential decisions explicitly stated or approved in p
 
 ## D-018 — Local HTTP preference, secure transport unresolved
 
-- **Status:** Accepted direction; implementation unresolved
+- **Status:** Superseded by D-023
 - **Date:** 2026-08-01
 - **Decision:** Prefer local HTTP where it can satisfy the security and ease-of-use goals. Do not expose secrets or clipboard data insecurely merely to avoid browser friction.
 - **Rationale:** The desired experience is local and frictionless, but pairing and clipboard require strong protection.
@@ -159,3 +159,45 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Date:** 2026-08-01
 - **Decision:** GitHub repository `likwidtek/Homer` is Homer’s public source of truth. Keep `docs/SESSION.md` local-only and excluded from all public history. Every push must pass a versioned, fail-closed pre-push gate that checks repository hygiene, forbidden private-data paths, and secrets with Gitleaks; do not bypass it with `--no-verify`. Use GitHub secret scanning and push protection as independent backstops.
 - **Rationale:** Vibe-coded projects need the same disciplined review and supply-chain protections as any other software. A local automated gate catches project-specific mistakes before publication, while GitHub provides a separate credential-detection layer.
+
+## D-023 — Trusted-LAN HTTP with bearer authorization for v0.1
+
+- **Status:** Accepted
+- **Date:** 2026-08-01
+- **Decision:** Homer v0.1 will use HTTP and WebSockets on the local network, authorized by revocable per-phone bearer credentials after the approved QR pairing flow. This is explicitly a trusted-LAN model, not encrypted transport. Homer must warn users never to expose its port to the internet, including by router port forwarding or automatic router exposure, and must not intentionally create a public-internet listener.
+- **Rationale:** This preserves a browser experience without certificate warnings or certificate-management setup. It deliberately accepts that HTTP cannot protect against a local-network attacker who can observe or alter traffic; the product must communicate that limitation accurately.
+
+## D-024 — Explicit, short-lived local pairing mode
+
+- **Status:** Accepted
+- **Date:** 2026-08-01
+- **Decision:** Homer’s agent may remain available to already paired phones, but it must not continuously accept pairing. Only an explicit local action through Decky/controller interaction can enable pairing mode; it automatically expires after a short bounded window, rejects network-initiated activation, and requires local target approval before issuing a unique revocable phone credential.
+- **Rationale:** This retains the intended Bluetooth-like, “stupid easy” user experience while reducing the opportunity for unnoticed or opportunistic pairing attempts.
+
+## D-025 — v0.1 text keyboard and trackpad contract
+
+- **Status:** Accepted
+- **Date:** 2026-08-01
+- **Decision:** v0.1 sends native phone-keyboard text and explicit pasted text to the machine as entered, with common non-native special keys and no synthesized held keys or automatic repeats. It provides a relative trackpad with left, middle, and right click, two-finger scrolling, and two-finger tap for right click. The intended supported experience is both Gaming Mode and Desktop Mode, in and out of games, subject to platform validation.
+- **Rationale:** This delivers the practical couch-side keyboard/mouse replacement without expanding into complex gesture or gamepad emulation scope.
+
+## D-026 — Text-only, consented clipboard retrieval
+
+- **Status:** Accepted
+- **Date:** 2026-08-01
+- **Decision:** Homer transfers text only. While an authorized remote browser is connected, the agent monitors the machine clipboard for convenient phone retrieval. The browser must disclose this and obtain a one-time persistent opt-in before displaying retrieved content. Homer keeps no clipboard history, logs, analytics, or background synchronization; consent remains until changed, phone revocation, or browser-data clearing.
+- **Rationale:** The workflow is useful for troubleshooting and sharing text, while transparent consent and no retention prevent unexpected or secondary use of sensitive content.
+
+## D-027 — Confirmed and cancellable power actions
+
+- **Status:** Accepted
+- **Date:** 2026-08-01
+- **Decision:** Sleep, graceful shutdown, and restart require explicit phone confirmation. Restart and shutdown provide a short visible cancellable countdown. They remain fixed named actions, never arbitrary command execution.
+- **Rationale:** The actions stay convenient from the couch without making accidental power changes too easy.
+
+## D-028 — One target machine, multiple paired phones, exclusive control
+
+- **Status:** Accepted
+- **Date:** 2026-08-01
+- **Decision:** v0.1 manages one target machine and permits multiple independently revocable paired phones. Only one phone may have an active control session at a time; a competing connection must be clearly rejected or explicitly handed off.
+- **Rationale:** This accommodates a household without creating simultaneous-input conflicts or expanding v0.1 into multi-machine management.

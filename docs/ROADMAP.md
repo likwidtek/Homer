@@ -18,6 +18,15 @@ This is a collection of future and deferred ideas from product discussion. It is
 - Optional remote view / screen share of the machine, combining visual context with input and clipboard access.
 - Assess a remote-view design without weakening the LAN-only, privacy-first boundary.
 
+## Deferred: richer phone controls
+
+- Trackpad pinch/zoom, drag lock, sensitivity controls, and additional gestures.
+- Gamepad emulation and held-key/repeat interaction models.
+
+## Deferred: transport defense in depth
+
+- Investigate whether an independently reviewed application-layer encrypted payload protocol can meaningfully protect already-paired traffic from passive LAN observation. Do not present it as HTTPS-equivalent protection: an HTTP-delivered browser interface remains vulnerable to active network modification.
+
 ## v0.2 priority: Decky recovery
 
 - Conservative Decky recovery, beginning with diagnosis, restart, and temporary disabling of third-party plugins to restore the Steam/Decky UI.
