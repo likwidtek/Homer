@@ -13,3 +13,7 @@ Decky is the initial distribution path, but the Homer agent must remain an indep
 Build to maximum Decky Plugin Store safety compliance even while initial releases are delivered through GitHub. Keep code concise, explainable, documented, tested, and manually reviewable. Do not add self-updaters, arbitrary remote code installation, controller-input hijacking, or broad destructive behavior.
 
 Do not write application code until the user has approved an implementation plan.
+
+## Public repository safety
+
+`main` is the public source of truth. `docs/SESSION.md` is local-only and must never be committed or pushed. Before every push, follow `docs/PUBLISHING.md`, run the required preflight, and never use `git push --no-verify` to bypass it.

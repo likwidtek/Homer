@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Versioned local publication gate. Install with:
+# git config --local core.hooksPath .githooks
+
+set -euo pipefail
+
+repo_root=$(git rev-parse --show-toplevel)
+exec "$repo_root/scripts/preflight-push"

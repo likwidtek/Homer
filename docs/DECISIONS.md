@@ -152,3 +152,10 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Date:** 2026-08-01
 - **Decision:** Apply least privilege, fixed allowlisted actions, local-only operation, explicit local opt-ins for any widened capability, and narrowly bounded access to sensitive local data. Homer’s transport, pairing, privilege, and update designs remain subject to Homer’s own requirements and validation.
 - **Rationale:** These principles align with Homer’s privacy-first, browser-only, no-self-updater direction while keeping security-sensitive implementation details open until they are validated.
+
+## D-022 — Public GitHub source and fail-closed publication preflight
+
+- **Status:** Accepted
+- **Date:** 2026-08-01
+- **Decision:** GitHub repository `likwidtek/Homer` is Homer’s public source of truth. Keep `docs/SESSION.md` local-only and excluded from all public history. Every push must pass a versioned, fail-closed pre-push gate that checks repository hygiene, forbidden private-data paths, and secrets with Gitleaks; do not bypass it with `--no-verify`. Use GitHub secret scanning and push protection as independent backstops.
+- **Rationale:** Vibe-coded projects need the same disciplined review and supply-chain protections as any other software. A local automated gate catches project-specific mistakes before publication, while GitHub provides a separate credential-detection layer.

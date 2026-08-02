@@ -34,6 +34,10 @@ The phone client will never provide arbitrary shell or terminal access. Privileg
 
 See [the product direction](docs/PRODUCT.md), [recorded decisions](docs/DECISIONS.md), and [roadmap](docs/ROADMAP.md) for details.
 
+## Publishing safety
+
+The public repository has a required local pre-push gate for private-data and credential checks. See [publishing and public-repository safety](docs/PUBLISHING.md).
+
 ## Contributing
 
 The project is not yet accepting external pull requests. Before that changes, Homer will publish contributor guidance with DCO sign-off requirements.

@@ -20,3 +20,6 @@ credentials/
 # Local logs and captures
 *.log
 captures/
+
+# Local Git hook implementation is versioned in .githooks/.
+# Git itself keeps the active hook configuration outside the repository.

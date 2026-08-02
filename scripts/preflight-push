@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Fail closed before any push. This complements, but does not replace,
+# GitHub secret scanning and push protection.
+
+set -euo pipefail
+
+fail() {
+  printf 'Push preflight failed: %s\n' "$1" >&2
+  exit 1
+}
+
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  fail 'working tree or index has uncommitted changes; commit or stash them first.'
+fi
+
+git diff --check HEAD || fail 'whitespace errors detected.'
+
+forbidden_paths='(^|/)(docs/SESSION\.md|\.DS_Store|\.env(\..*)?|secrets/|credentials/)|\.(pem|key|p12|pfx|crt|token)$'
+if git ls-files | grep -E "$forbidden_paths" >/dev/null; then
+  git ls-files | grep -E "$forbidden_paths" >&2
+  fail 'a forbidden private or credential-bearing path is tracked.'
+fi
+
+command -v gitleaks >/dev/null 2>&1 || fail 'Gitleaks is required. Install it, then retry: brew install gitleaks'
+gitleaks git --redact --no-banner . || fail 'Gitleaks detected a potential secret.'
+
+printf 'Push preflight passed.\n'
