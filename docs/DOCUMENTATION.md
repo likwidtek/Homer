@@ -52,6 +52,12 @@ For any product, architecture, security, or implementation change:
 5. Update `docs/SESSION.md` at a natural handoff with current state, unresolved work, and the next safe step.
 6. Before publication, follow `docs/PUBLISHING.md`; review documentation for private data as carefully as code.
 
+## Workstream closeout
+
+At a user-requested closeout, assess completion rather than assuming it. Report the scope outcome, deferred or blocked work, validation and review results, repository/upstream state, documentation coverage, and the exact permanent or external actions proposed. Update `docs/SESSION.md` and provide a compact copy/paste handoff when another task may continue the work. That handoff must instruct the receiving task to re-read `AGENTS.md`, `docs/PRODUCT.md`, `docs/DECISIONS.md`, `docs/SESSION.md`, the local operator file if present, and documents applicable under `AGENTS.md` task routing.
+
+A closeout signal alone does not authorize a commit, push, external message, task archive, or task rename. Obtain explicit approval for each such action unless the current user request already unambiguously grants it. Recommend whether the task should be archived as complete, retained for testing or waiting, marked blocked, or continued as follow-on work.
+
 ## AI-oriented files
 
 Repository instructions such as `AGENTS.md` are public when they contain durable project context and reviewable workflow rules. Keep them short, self-contained, and task-agnostic enough to help a new contributor. Store personal AI preferences in the user’s tool settings or private context; Homer’s local project-specific location is `docs/private/OPERATOR.md`.

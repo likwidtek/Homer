@@ -215,3 +215,17 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Date:** 2026-08-02
 - **Decision:** When present, ignored `docs/private/OPERATOR.md` is read after required public documentation and before work begins. It contains only the project owner’s private collaboration preferences. It may not override platform safety constraints, current explicit user instructions, or public repository requirements, and its contents must never be staged, committed, pushed, quoted, or promoted into public documentation without explicit user direction.
 - **Rationale:** This gives the project owner a durable private communication layer without making hidden preferences an unreviewable source of public product or engineering policy.
+
+## D-031 — Explicit-approval workstream closeout
+
+- **Status:** Accepted
+- **Date:** 2026-08-02
+- **Decision:** A user signal to close a workstream requires a completion assessment and a structured closeout report, including validation, documentation coverage, repository state, remaining work, and a copy/paste handoff. It does not by itself authorize a commit, push, external message, task archive, or task rename; each permanent or external action requires explicit approval unless the current request already unambiguously grants it. A closeout recommends one disposition: complete/archive, testing, waiting, blocked, or follow-on work.
+- **Rationale:** This creates a repeatable, reviewable endpoint for every task while preserving the owner’s deliberate control over public changes and task lifecycle.
+
+## D-032 — Handoff requires fresh task-context reading
+
+- **Status:** Accepted
+- **Date:** 2026-08-02
+- **Decision:** Every closeout handoff must tell a receiving new or resumed task to re-read `AGENTS.md`, `docs/PRODUCT.md`, `docs/DECISIONS.md`, `docs/SESSION.md`, the local operator-preference file if present, and the documents required by task routing before acting.
+- **Rationale:** A parent or newly created task may not contain the latest decisions or local handoff state. Explicit fresh reading prevents stale context from silently governing the next workstream.
