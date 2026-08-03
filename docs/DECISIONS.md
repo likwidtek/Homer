@@ -137,7 +137,7 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Date:** 2026-08-01
 - **Decision:** Build Homer for maximum Decky Plugin Store safety compliance from the outset, but distribute the initial Decky plugin through GitHub releases. An official Store listing is a later goal, not a v0.1 dependency.
 - **Rationale:** The Store’s review and safety standards align with Homer’s security goals, but Store acceptance is uncertain and must not block delivery.
-- **Required design implications:** no self-updating agent, arbitrary remote code installation, controller-input hijacking, or broad destructive behavior. Keep code concise, explainable, documented, tested, and manually reviewable; AI assistance does not waive these responsibilities.
+- **Required design implications:** Store installations use Decky’s update path. The only non-Store exception is the bounded signed-update mechanism accepted in D-033; arbitrary remote code installation, controller-input hijacking, and broad destructive behavior remain prohibited. Keep code concise, explainable, documented, tested, and manually reviewable; AI assistance does not waive these responsibilities.
 
 ## D-020 — No Homer-collected user telemetry
 
@@ -229,3 +229,10 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Date:** 2026-08-02
 - **Decision:** Every closeout handoff must tell a receiving new or resumed task to re-read `AGENTS.md`, `docs/PRODUCT.md`, `docs/DECISIONS.md`, `docs/SESSION.md`, the local operator-preference file if present, and the documents required by task routing before acting.
 - **Rationale:** A parent or newly created task may not contain the latest decisions or local handoff state. Explicit fresh reading prevents stale context from silently governing the next workstream.
+
+## D-033 — Channel-owned, bounded Homer updates
+
+- **Status:** Accepted
+- **Date:** 2026-08-03
+- **Decision:** The installation channel owns Homer updates. Official Decky Plugin Store installations use Decky’s update path exclusively and show the installed version only. GitHub-sideloaded Decky and standalone installations may manually check for and install updates from Homer’s fixed official source. Their first manual check may invite, but must not require, opt-in to automatic checks or automatic checks and installation; the user may choose a daily or weekly schedule. Any paired/authorized phone or the local machine may request a manual check or installation. Automatic installation waits for no active remote control session. Updates must use signed metadata and artifacts, hash verification, staged atomic activation, a health check, and automatic rollback. Homer must not update Decky Loader or its plugin files through this path.
+- **Rationale:** This gives non-Store users a set-it-and-forget-it option without making every installation a remote updater, while respecting Decky’s ownership and review model for Store installations. The bounded verification and rollback rules keep the convenience path narrow, auditable, and recoverable.

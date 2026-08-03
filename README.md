@@ -19,7 +19,7 @@ Homer is currently in product design. It is not yet installable and no applicati
 
 ## Safety and privacy
 
-Homer is local-network-only. It has no accounts, cloud relays, remote internet access, or Homer-collected telemetry. The project may use aggregate repository traffic and release-download counts supplied by distribution platforms; those are not install or active-user metrics.
+Homer is local-network-only. It has no accounts, cloud relays, remote internet access, or Homer-collected telemetry. Non-Store installations may contact Homer’s official release source only to check for or fetch verified Homer updates; Store installations use Decky’s update path. The project may use aggregate repository traffic and release-download counts supplied by distribution platforms; those are not install or active-user metrics.
 
 The phone client will never provide arbitrary shell or terminal access. Privileged behavior, if needed, is limited to fixed, audited, deliberately confirmed actions. The normal agent aims to run rootlessly; required permissions remain to be validated.
 

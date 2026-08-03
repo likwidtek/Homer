@@ -6,11 +6,23 @@ This document preserves Homer’s accepted v0.1 security and connection intent. 
 
 ## User promise and boundary
 
-Homer is a local-network companion for a trusted home LAN. It has no cloud account, relay, telemetry service, or intended internet access.
+Homer is a local-network companion for a trusted home LAN. It has no cloud account, relay, or telemetry service, and it does not provide remote internet access. Its sole intended outbound-internet exception is checking for or fetching a verified Homer update for a non-Store installation, as described below. An official Decky Plugin Store installation has no Homer-managed update traffic; Decky owns that update path.
 
 Homer v0.1 uses HTTP and WebSockets rather than HTTPS/WSS to avoid certificate warnings and certificate-management setup in mobile browsers. Consequently, it does **not** provide transport confidentiality or integrity against someone able to observe or alter the local network. Users must never port-forward Homer, expose it through a reverse proxy, enable automatic router exposure for it, or use it on an untrusted/shared network.
 
 Homer must state this boundary plainly during first-run setup and in user-facing documentation. It must not intentionally create a public-internet listener or automatic router mapping.
+
+## Non-Store update boundary
+
+GitHub-sideloaded Decky and standalone Homer installations may check Homer’s fixed official release source for an update. A manual check is always available to an authorized paired phone or the local machine. On its first use, Homer may invite the user to enable automatic updates, but the prompt must not block the requested manual check.
+
+Automatic behavior is opt-in and user-selectable: automatic checks, or automatic checks and installation, on a daily or weekly schedule. The default is manual-only. Automatic installation must wait until no remote control session is active. An authorized paired phone or the local machine may also explicitly request installation.
+
+The updater is not a general downloader or remote-command feature. It must use only the fixed official source and release formats defined by Homer, authenticate release metadata and artifacts with a release-signing public key shipped with Homer, verify the declared artifact hash before activation, stage and validate a new version before atomically activating it, and automatically roll back to the last known-good version if the post-update health check fails. It must not accept a phone-supplied URL, executable, command, or arbitrary version path.
+
+The update UI must disclose that the release source receives ordinary request metadata under that source’s privacy practices. Homer must not add its own device identifier, usage payload, installation-success ping, or heartbeat. Platform-provided aggregate release-download statistics remain downloads, not confirmed installations or successful updates.
+
+Homer must determine the update policy from trusted installation metadata, not from a remote assertion. A Store installation must disable Homer-managed checking, downloading, and installation and show the installed version only. Homer must not update Decky Loader or its plugin files through this path; if an agent update requires a newer Decky-facing component, it must fail safely and direct the user to Decky’s appropriate update mechanism.
 
 ## Threat model
 
@@ -49,4 +61,4 @@ Application-layer encrypted payloads may be investigated as a later, independent
 
 ## Release gate
 
-Before claiming v0.1 readiness, manually test the pairing-expiry, local-approval, credential revocation, unauthorized-request, and no-internet-exposure behaviors on the supported Bazzite and SteamOS configurations. The first-run warning must be understandable without security expertise.
+Before claiming v0.1 readiness, manually test the pairing-expiry, local-approval, credential revocation, unauthorized-request, and no-internet-exposure behaviors on the supported Bazzite and SteamOS configurations. For a non-Store update path, test fixed-source enforcement, invalid signature/hash rejection, interrupted download handling, atomic activation, health-check rollback, active-session deferral, Store-mode disablement, and the first-use disclosure. The first-run warning must be understandable without security expertise.

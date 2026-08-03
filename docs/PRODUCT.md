@@ -25,7 +25,7 @@ Create an open-source, privacy-first companion that lets a phone's web browser h
 - The phone experience is browser-only; a native iPhone or Android application is not the intended client.
 - The product is open source.
 - Homer is licensed GPL-3.0-or-later. Tips and donations are welcome and are separate from licensing.
-- Privacy is a core tenet: local-network only, no cloud account, no cloud relay, no Homer-collected telemetry, and no remote access over the internet. Privacy-preserving aggregate repository and release statistics supplied by distribution platforms are permitted, but are not install or active-user metrics.
+- Privacy is a core tenet: local-network only, no cloud account, no cloud relay, no Homer-collected telemetry, and no remote access over the internet. A non-Store installation may make a narrowly bounded outbound request to Homer’s official release source to check for or fetch a user-authorized update; this is not a cloud service or telemetry. Privacy-preserving aggregate repository and release statistics supplied by distribution platforms are permitted, but are not install or active-user metrics.
 - Protect privacy and secrets, especially around pairing and clipboard content.
 - Favor a simple, lazy-friendly, controller-friendly experience over broad feature scope.
 - Support scalable distribution and portability: the same core should be able to reach Bazzite, SteamOS, other Linux systems, and potentially Windows later.
@@ -56,11 +56,13 @@ Let a user use their phone browser as a quick keyboard and trackpad/mouse compan
 
 - Begin with Decky Loader as the initial installation and distribution path for Homer.
 - Deliver the initial Decky plugin through GitHub releases. Do not make an official Decky Store listing a requirement for v0.1.
-- Build toward Store compliance from the start: no self-updating agent, no arbitrary remote code installation, no controller-input hijacking, and no broad destructive behavior.
+- Build toward Store compliance from the start: Store installations use Decky’s update path exclusively. Non-Store installations may use the narrowly bounded, user-controlled Homer update path defined in `docs/SECURITY.md`; no arbitrary remote code installation, controller-input hijacking, or broad destructive behavior is permitted.
 - Use the Decky plugin to bootstrap an independent, portable local Homer agent. The agent must run independently from Decky after installation.
 - Keep the core adaptable for independent installation and other distribution methods later; these are required architectural considerations, not the initial delivery path.
 - Plan an independent installation route for users without Decky and for recovery when Decky is unavailable; this follows the Decky-first initial delivery.
 - Aim to make setup workable using a controller where feasible. For a machine that has no trusted software installed, zero machine interaction is not currently established as feasible.
+- The installation channel determines update behavior. An official Decky Plugin Store installation shows its version but offers no Homer-managed checking or updating. A GitHub-sideloaded Decky installation or standalone installation offers manual update checks and installation, and may offer opt-in automatic checks or automatic installation on a daily or weekly schedule.
+- The first manual update check on a non-Store installation invites the user to enable automatic updates but never prevents that manual check from continuing. Any paired/authorized phone or the local machine may request a manual check or installation. Automatic installation waits until no remote control session is active.
 
 ### Future Decky recovery direction
 
@@ -109,7 +111,7 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 - The local machine needs trusted software capable of receiving input and performing approved actions; the phone browser alone cannot establish that on a new device.
 - The product must not require Decky to keep functioning after setup.
 - Decky-first installation does not by itself establish permission to distribute through the official Decky store. Store eligibility and policy compliance must be confirmed with Decky maintainers before it becomes a release dependency.
-- GitHub-delivered Decky releases must still follow the Decky safety standards: versioned/reviewable agent artifacts, no self-update mechanism, no unverified executable downloads, no controller-input hijacking, and no code likely to broadly delete or corrupt data.
+- GitHub-delivered Decky releases must still follow the Decky safety standards: versioned/reviewable agent artifacts, only the bounded signed-update mechanism approved for non-Store installs, no unverified executable downloads, no controller-input hijacking, and no code likely to broadly delete or corrupt data.
 - Decky recovery actions must be explicitly allowlisted, locally auditable, and confirmed before execution. They must not download and execute arbitrary scripts.
 - The QR pairing flow must require a short-lived, single-use bootstrap and local target approval before granting a revocable phone credential.
 - The agent may remain available to already paired phones, but pairing must not be continuously enabled and no LAN request may enable pairing mode.
@@ -155,4 +157,4 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 10. Can an independently reviewed application-layer encryption design offer meaningful passive-observer defense-in-depth after pairing without weakening the trusted-LAN HTTP model or creating an unsafe bespoke cryptographic protocol?
 11. What should the exact local-approval UX be when a new phone scans the QR code but the Steam UI is partially unhealthy?
 12. What Bazzite and SteamOS permissions are required for rootless input injection, clipboard access, and basic power actions?
-13. What versioned packaging and update path keeps the independent agent synchronized with GitHub-delivered Decky plugin releases without creating a prohibited self-updater?
+13. What versioned packaging and compatibility contract keeps the independently updated agent and GitHub-delivered Decky plugin synchronized without allowing Homer to update Decky itself?

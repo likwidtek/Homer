@@ -66,5 +66,5 @@ This is a collection of future and deferred ideas from product discussion. It is
 - Keep Decky optional so the companion remains useful when Decky is absent or broken.
 - Keep every privileged action fixed, auditable, and confirmation-gated; do not add phone-accessible arbitrary shell execution.
 - Aim for the normal network-facing agent to run rootlessly; validate its required permissions before claiming rootless support. If one-time setup or future recovery needs elevation, keep it narrowly scoped; isolate any privileged recovery helper so it does not listen on the network.
-- Maintain maximum Decky Store safety compliance from the first GitHub release: concise/reviewable code, manual quality ownership, no self-updaters, no arbitrary code installation, no controller-input hijacking, and no broad destructive behavior.
+- Maintain maximum Decky Store safety compliance from the first GitHub release: concise/reviewable code, manual quality ownership, the bounded signed-update mechanism accepted for non-Store installs only, no arbitrary code installation, no controller-input hijacking, and no broad destructive behavior.
 - Before the first public release or accepting external pull requests, revisit a lightweight Homer trademark/brand policy, `CONTRIBUTING.md` with DCO sign-off, name clearance, and possible formal trademark registration.
