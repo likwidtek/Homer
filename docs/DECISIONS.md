@@ -201,3 +201,17 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Date:** 2026-08-01
 - **Decision:** v0.1 manages one target machine and permits multiple independently revocable paired phones. Only one phone may have an active control session at a time; a competing connection must be clearly rejected or explicitly handed off.
 - **Rationale:** This accommodates a household without creating simultaneous-input conflicts or expanding v0.1 into multi-machine management.
+
+## D-029 — Public documentation governance and private working context
+
+- **Status:** Accepted
+- **Date:** 2026-08-02
+- **Decision:** All tracked repository documentation is public, durable, and reviewable. `docs/DOCUMENTATION.md` defines its authority, lifecycle, and when to create a new document. `docs/SESSION.md` and ignored `docs/private/` are the only designated local documentation areas; they must never be staged, committed, or pushed. `AGENTS.md` must route task types to their governing documentation and be audited at new work-category and plan-approval boundaries.
+- **Rationale:** Open source benefits from transparent, maintainable project context, while private working notes, sensitive material, and raw AI artifacts must stay out of public history.
+
+## D-030 — Local operator-preference instruction layer
+
+- **Status:** Accepted
+- **Date:** 2026-08-02
+- **Decision:** When present, ignored `docs/private/OPERATOR.md` is read after required public documentation and before work begins. It contains only the project owner’s private collaboration preferences. It may not override platform safety constraints, current explicit user instructions, or public repository requirements, and its contents must never be staged, committed, pushed, quoted, or promoted into public documentation without explicit user direction.
+- **Rationale:** This gives the project owner a durable private communication layer without making hidden preferences an unreviewable source of public product or engineering policy.

@@ -2,7 +2,7 @@
 
 ## Status
 
-Homer is publicly hosted at `https://github.com/likwidtek/Homer`. The `main` branch is the public source of truth. `docs/SESSION.md` is intentionally local-only and must never be committed or pushed.
+Homer is publicly hosted at `https://github.com/likwidtek/Homer`. The `main` branch is the public source of truth. `docs/SESSION.md` and `docs/private/` are intentionally local-only and must never be committed or pushed. See `docs/DOCUMENTATION.md` for the public/private documentation boundary and document lifecycle.
 
 ## Hard pre-push requirement
 
@@ -12,7 +12,7 @@ The hook fails closed when:
 
 - The working tree or index has uncommitted changes.
 - Git detects whitespace errors.
-- A tracked path matches a forbidden private-data pattern, including `docs/SESSION.md`, `.env` files, keys, certificates, tokens, or `secrets/` and `credentials/` directories.
+- A tracked path matches a forbidden private-data pattern, including `docs/SESSION.md`, `docs/private/`, `.env` files, keys, certificates, tokens, or `secrets/` and `credentials/` directories.
 - Gitleaks is unavailable.
 - Gitleaks finds a potential secret in Git history.
 

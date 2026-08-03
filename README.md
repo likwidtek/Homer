@@ -39,7 +39,7 @@ See [the product direction](docs/PRODUCT.md), [v0.1 interaction model](docs/INTE
 
 ## Publishing safety
 
-The public repository has a required local pre-push gate for private-data and credential checks. See [publishing and public-repository safety](docs/PUBLISHING.md).
+The public repository has a required local pre-push gate for private-data and credential checks. See [documentation standards](docs/DOCUMENTATION.md) and [publishing and public-repository safety](docs/PUBLISHING.md).
 
 ## Contributing
 

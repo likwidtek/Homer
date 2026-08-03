@@ -18,7 +18,7 @@ fi
 
 git diff --check HEAD || fail 'whitespace errors detected.'
 
-forbidden_paths='(^|/)(docs/SESSION\.md|\.DS_Store|\.env(\..*)?|secrets/|credentials/)|\.(pem|key|p12|pfx|crt|token)$'
+forbidden_paths='(^|/)(docs/SESSION\.md|docs/private/|\.DS_Store|\.env(\..*)?|secrets/|credentials/)|\.(pem|key|p12|pfx|crt|token)$'
 if git ls-files | grep -E "$forbidden_paths" >/dev/null; then
   git ls-files | grep -E "$forbidden_paths" >&2
   fail 'a forbidden private or credential-bearing path is tracked.'
