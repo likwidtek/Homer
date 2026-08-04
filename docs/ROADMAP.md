@@ -8,6 +8,7 @@ This is a collection of future and deferred ideas from product discussion. It is
 
 - Browser-based phone keyboard and trackpad/mouse for paired local machines.
 - Clipboard transfer and convenient machine-to-phone clipboard retrieval within browser limitations.
+- Authenticated application-layer encryption for sensitive phone/agent messages on the trusted LAN.
 - Restart, graceful shutdown, and sleep.
 - Single actively paired and controlled machine, with architecture that does not preclude later multi-machine support.
 - Decky-first installation through GitHub releases, bootstrapping an independent agent that continues to operate if Decky fails.
@@ -22,10 +23,6 @@ This is a collection of future and deferred ideas from product discussion. It is
 
 - Trackpad pinch/zoom, drag lock, sensitivity controls, and additional gestures.
 - Gamepad emulation and held-key/repeat interaction models.
-
-## Deferred: transport defense in depth
-
-- Investigate whether an independently reviewed application-layer encrypted payload protocol can meaningfully protect already-paired traffic from passive LAN observation. Do not present it as HTTPS-equivalent protection: an HTTP-delivered browser interface remains vulnerable to active network modification.
 
 ## v0.2 priority: Decky recovery
 
@@ -46,6 +43,7 @@ This is a collection of future and deferred ideas from product discussion. It is
 
 - Direct validation and supported release path for SteamOS.
 - Broader support for Linux distributions, including immutable/atomic and conventional systems.
+- IPv6-only, multi-segment/VLAN, and other network environments outside v0.1’s direct RFC1918 LAN contract.
 - Windows as a stretch/later target.
 - Submit Homer to the official Decky Store only after the GitHub-delivered plugin is mature and Store eligibility has been confirmed.
 - Additional distribution routes such as Bazzite integration, Flatpak, and other open-source stores or packaging methods.

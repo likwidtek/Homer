@@ -162,7 +162,7 @@ These records capture consequential decisions explicitly stated or approved in p
 
 ## D-023 — Trusted-LAN HTTP with bearer authorization for v0.1
 
-- **Status:** Accepted
+- **Status:** Superseded by D-039 and D-042
 - **Date:** 2026-08-01
 - **Decision:** Homer v0.1 will use HTTP and WebSockets on the local network, authorized by revocable per-phone bearer credentials after the approved QR pairing flow. This is explicitly a trusted-LAN model, not encrypted transport. Homer must warn users never to expose its port to the internet, including by router port forwarding or automatic router exposure, and must not intentionally create a public-internet listener.
 - **Rationale:** This preserves a browser experience without certificate warnings or certificate-management setup. It deliberately accepts that HTTP cannot protect against a local-network attacker who can observe or alter traffic; the product must communicate that limitation accurately.
@@ -185,7 +185,7 @@ These records capture consequential decisions explicitly stated or approved in p
 
 - **Status:** Accepted
 - **Date:** 2026-08-01
-- **Decision:** Homer transfers text only. While an authorized remote browser is connected, the agent monitors the machine clipboard for convenient phone retrieval. The browser must disclose this and obtain a one-time persistent opt-in before displaying retrieved content. Homer keeps no clipboard history, logs, analytics, or background synchronization; consent remains until changed, phone revocation, or browser-data clearing.
+- **Decision:** Homer transfers text only. While an authorized remote browser is connected, the agent monitors the machine clipboard for convenient phone retrieval. The browser must disclose this and obtain a one-time persistent opt-in before displaying retrieved content. Homer keeps no clipboard history, logs, analytics, or background synchronization; consent remains until changed, phone revocation, or browser site-data clearing.
 - **Rationale:** The workflow is useful for troubleshooting and sharing text, while transparent consent and no retention prevent unexpected or secondary use of sensitive content.
 
 ## D-027 — Confirmed and cancellable power actions
@@ -271,3 +271,38 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Date:** 2026-08-03
 - **Decision:** Initial compatibility claims are limited to the tested Bazzite KDE Desktop Mode and Steam Gaming Mode configuration, and the tested current-stable Steam Deck/SteamOS configuration. Homer makes no v0.1 claim for Bazzite GNOME, NVIDIA-specific behavior, other desktop environments, other hardware, or untested SteamOS variants.
 - **Rationale:** Bazzite and SteamOS vary materially by desktop environment, compositor, hardware, and configuration. A narrow claim gives the project a reliable Bazzite-first start and prevents unvalidated support promises.
+
+## D-039 — Authenticated application-layer protection for remote messages
+
+- **Status:** Accepted
+- **Date:** 2026-08-03
+- **Decision:** Homer continues to serve its browser interface and upgrade connections over local HTTP/WebSockets, but v0.1 must protect every keyboard, mouse, clipboard, status, power, and remote-management message inside an authenticated application-layer encrypted channel. Pairing and reconnection use 256-bit pre-shared secrets with an established, independently reviewed protocol family such as Noise; Homer must not invent its own cryptographic handshake. The exact protocol pattern and pinned browser/agent implementation are implementation-plan dependencies and must pass official vectors, cross-implementation tests, dependency review, and browser/platform validation before release.
+- **Rationale:** This meaningfully protects sensitive traffic from passive LAN observation and unauthenticated message injection while retaining certificate-free browser onboarding. It is not HTTPS-equivalent: an active LAN attacker can alter the HTTP-delivered browser code and defeat the protection, so Homer’s trusted-LAN boundary remains essential.
+
+## D-040 — Exact v0.1 pairing bootstrap and approval contract
+
+- **Status:** Accepted
+- **Date:** 2026-08-03
+- **Decision:** A local Decky/controller action enables one pairing window for five minutes and creates a 256-bit single-use bootstrap secret. The QR carries that secret in its URL fragment; the browser must remove the fragment from visible URL/history state immediately after reading it, and the secret is never sent as plaintext. A successful pre-shared-key handshake binds one pending request and consumes the bootstrap for further attempts. The phone and Decky display the same six-digit code bound to that handshake; local approval or rejection must occur within two minutes. Approval delivers a unique 256-bit per-phone secret only through the encrypted pairing channel. No LAN request can create, extend, or reopen pairing mode.
+- **Rationale:** The flow remains scan-and-approve simple while limiting replay, races, accidental approval, URL leakage, and unattended pairing exposure.
+
+## D-041 — Hybrid discovery, canonical reconnection, and bounded listeners
+
+- **Status:** Accepted
+- **Date:** 2026-08-03
+- **Decision:** The pairing QR initially uses the agent’s current eligible RFC1918 IPv4 address so first contact does not depend on multicast DNS. During pairing, the browser automatically tests a stable, randomly generated `.local` hostname. When it works, a separate short-lived single-use encrypted migration claim moves durable browser state to that canonical origin for reconnection across DHCP changes and removes the credential from the temporary IP origin. When it does not, Homer remains usable through the current address but identifies discovery as degraded and explains that an address change may require locally approved reconnection. The agent answers its high-entropy direct mDNS hostname without advertising an enumerable Homer service. It binds only to explicitly selected eligible RFC1918 LAN addresses, never wildcard, public, global-IPv6, VPN/tunnel, or container/virtual addresses; it creates no UPnP or NAT-PMP mapping. IPv6-only and segmented/isolated networks are outside the v0.1 compatibility claim.
+- **Rationale:** Direct-IP bootstrap tolerates multicast-hostile home equipment, while the canonical `.local` origin removes ordinary DHCP friction. Narrow address selection and no automatic router mapping reduce accidental exposure without pretending software can defeat deliberate port forwarding or hostile network infrastructure.
+
+## D-042 — Per-phone secret lifecycle and exclusive control lease
+
+- **Status:** Accepted
+- **Date:** 2026-08-03
+- **Decision:** Each paired browser stores its 256-bit phone secret in origin-scoped IndexedDB; the agent stores the corresponding credential-equivalent secret material in owner-only state. The secret is never placed in ordinary requests, URLs, logs, diagnostics, or telemetry and does not rotate on a timer in v0.1. It remains valid until locally revoked, self-revoked through an authenticated channel, or Homer is uninstalled. Revocation immediately terminates that phone’s sessions. Each WebSocket must complete its authenticated encryption handshake within ten seconds. An authenticated phone explicitly acquires a thirty-second renewable control lease; the same phone may replace its stale prior connection immediately, while another phone is clearly denied control until release or expiry. v0.1 has no remote kick-over or cross-phone handoff.
+- **Rationale:** Stable credentials preserve the “stupid easy” return experience, per-phone revocation bounds access, and a short renewable lease resolves abandoned mobile connections without allowing simultaneous input.
+
+## D-043 — Trusted-LAN disclosure and browser-data recovery boundary
+
+- **Status:** Accepted
+- **Date:** 2026-08-03
+- **Decision:** Decky first run and each new-phone pairing must plainly disclose once that Homer is for a trusted home network, sensitive messages are protected only after pairing, the browser interface itself arrives over HTTP, an active hostile network can defeat that protection, and Homer must never be port-forwarded or used on public/shared Wi-Fi. The user explicitly continues past the disclosure; normal UI retains a compact trusted-LAN status link. Ordinary browser asset-cache clearing must not unpair a phone because credentials live in IndexedDB. Clearing or losing origin site data removes the phone’s only credential copy and requires locally approved re-pairing; Homer must not use device fingerprinting, URL-carried recovery credentials, or misleading Keychain/Keystore claims. The old agent-side phone record remains revocable until the owner removes it.
+- **Rationale:** Users receive an accurate, comprehensible promise without repeated warning fatigue, and recovery remains secure rather than silently replacing authentication with fingerprinting or exposed secrets.

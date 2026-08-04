@@ -8,7 +8,9 @@ This document preserves Homer’s accepted v0.1 security and connection intent. 
 
 Homer is a local-network companion for a trusted home LAN. It has no cloud account, relay, or telemetry service, and it does not provide remote internet access. Its sole intended outbound-internet exception is checking for or fetching a verified Homer update for a non-Store installation, as described below. An official Decky Plugin Store installation has no Homer-managed update traffic; Decky owns that update path.
 
-Homer v0.1 uses HTTP and WebSockets rather than HTTPS/WSS to avoid certificate warnings and certificate-management setup in mobile browsers. Consequently, it does **not** provide transport confidentiality or integrity against someone able to observe or alter the local network. Users must never port-forward Homer, expose it through a reverse proxy, enable automatic router exposure for it, or use it on an untrusted/shared network.
+Homer v0.1 uses HTTP and WebSockets rather than HTTPS/WSS to avoid certificate warnings and certificate-management setup in mobile browsers. After pairing, Homer protects sensitive remote messages inside an authenticated application-layer encrypted channel. This protects the genuine Homer client’s keyboard, mouse, clipboard, status, power, and management messages from passive LAN observation and unauthenticated injection.
+
+This protection is not HTTPS-equivalent. The browser interface itself arrives over HTTP, so an active LAN attacker can replace that code, steal pairing material, or defeat its message protection. Traffic timing, connection metadata, and the public browser assets are not confidential. Users must never port-forward Homer, expose it through a reverse proxy, enable automatic router exposure for it, or use it on an untrusted/shared network.
 
 Homer must state this boundary plainly during first-run setup and in user-facing documentation. It must not intentionally create a public-internet listener or automatic router mapping.
 
@@ -28,9 +30,9 @@ Homer must not update Decky Loader or its plugin files through its non-Store pat
 
 ## Threat model
 
-Within a trusted LAN, Homer protects against accidental or unauthorised use by nearby devices that do not possess a valid paired-phone credential. Local approval and short-lived pairing materially reduce the risk of an unnoticed nearby scan becoming control access.
+Within a trusted LAN, Homer protects against accidental or unauthorised use by nearby devices that do not possess a valid paired-phone secret. Local approval, short-lived pairing, and the authenticated encrypted-message channel materially reduce unnoticed pairing, passive disclosure, replay, and unauthenticated message-injection risks.
 
-Homer does not claim to protect against a hostile LAN participant, malicious access point/router, ARP/DNS spoofing, traffic capture, or traffic modification. HTTP makes these attacks possible. A bearer credential captured from HTTP traffic can be replayed; an attacker who can modify the delivered browser interface can also defeat browser-side protections.
+Homer does not claim to protect against a hostile LAN participant, malicious access point/router, ARP/mDNS spoofing, or active traffic modification. HTTP makes browser-code replacement possible, and an attacker who changes the delivered interface can defeat its browser-side protections. Application-layer protection does not make public/shared Wi-Fi or internet exposure safe.
 
 The project must continue to use least privilege, narrow fixed action allowlists, and deliberate confirmation for sensitive actions. Those measures reduce the impact of a compromised client but do not convert HTTP into secure transport.
 
@@ -40,27 +42,58 @@ The independent agent may remain available to already paired phones after Decky 
 
 - Only a local user action in Decky, initiated through the machine/controller UI, may enable pairing mode.
 - No LAN request may enable pairing mode.
-- Pairing mode is short-lived and automatically expires; its exact duration is an implementation parameter to validate.
+- Pairing mode lasts five minutes and then closes automatically.
 - While pairing mode is disabled, the agent must reject pairing attempts and must not issue credentials.
-- A short-lived, single-use QR bootstrap begins a pairing attempt. It is not a reusable control credential.
-- The target must receive local Decky/controller approval before issuing a unique, revocable credential to the new phone.
+- Pairing mode permits one pending request. A new local action is required to regenerate an expired, consumed, rejected, or failed bootstrap.
+- A QR carries a 256-bit, single-use bootstrap secret in its URL fragment. The browser removes that fragment from visible URL/history state immediately after reading it. The bootstrap is used as a pre-shared handshake secret and is never sent as plaintext or reused as a control credential.
+- A successful authenticated handshake binds the pending request and makes the bootstrap unavailable to further attempts.
+- The phone and Decky display the same six-digit comparison code bound to that handshake. The target must approve or reject it locally within two minutes.
+- Approval issues a unique 256-bit per-phone secret only inside the encrypted pairing channel.
 
 This keeps the user experience analogous to deliberate Bluetooth pairing: the user asks the machine to become pairable, scans, approves locally, and then returns to ordinary use.
 
-## Connected-session authorization
+## Message protection and session authentication
 
-Each paired phone receives its own revocable bearer credential. Every control, clipboard, status, or power-action API requires authorization; only a minimal reachability check may be unauthenticated. A WebSocket must not accept or act on control data until the client authenticates at the application level.
+Homer must use an established, independently reviewed pre-shared-key protocol family such as Noise to authenticate the phone and derive fresh authenticated-encryption keys for each session. Homer must not invent its own cryptographic handshake. The exact protocol pattern and pinned implementation depend on the approved agent/browser technology choices and are release dependencies, not latitude to omit protection.
 
-Long-lived credentials and clipboard data must not be placed in URLs, browser history, logs, diagnostics, or telemetry. The exact handling of the short-lived QR bootstrap is still to be specified. Machine-side credential files must use restrictive owner-only permissions. Phone-side persistence remains an implementation question; a browser/PWA cannot directly claim to use native Keychain or Keystore APIs.
+The implementation must use cryptographically secure randomness, bundle all browser cryptography locally, load no executable code or assets from third parties, and enforce a restrictive Content Security Policy. It must pass the protocol’s official vectors, cross-implementation interoperability tests, malformed-message and replay tests, dependency/license review, and direct validation in supported mobile browsers. Protocol negotiation and version data must be bound into the authenticated handshake so they cannot be silently downgraded.
 
-The exact credential format, rotation, expiration, WebSocket handshake mechanics, browser persistence, and revocation UX remain open design work. They must be specified before implementation.
+HTTP may expose only immutable browser assets and a content-free reachability response. Pairing is available only during the locally opened window. Every keyboard, mouse, clipboard, status, power, update, and remote-management message must travel through the authenticated encrypted channel; Homer must not provide a plaintext sensitive REST fallback.
 
-## Defense in depth
+Each WebSocket begins unauthenticated and must complete its handshake within ten seconds. Before completion it receives no sensitive state and may perform no action. Failed and malformed handshakes are closed and rate-limited without revealing whether a device identifier exists.
 
-Homer should minimise exposed surface area, reject invalid requests, rate-limit failed authorization, avoid permissive cross-origin access, avoid logging sensitive payloads, and end inactive sessions. Network binding and IPv4/IPv6 exposure must be validated on Bazzite and SteamOS.
+An authenticated phone explicitly acquires a thirty-second renewable control lease for input, clipboard, and power actions. The same phone may replace its stale prior connection immediately, which supports ordinary mobile reconnection. A different phone is clearly denied control until the holder releases it or the lease expires. v0.1 does not allow a remote kick-over or cross-phone handoff. Authenticated non-control capabilities must remain narrowly scoped to accepted actions such as status and the bounded update path.
 
-Application-layer encrypted payloads may be investigated as a later, independently reviewed defense against passive observation after pairing. They must not be described as HTTPS-equivalent protection because the HTTP-delivered browser interface remains vulnerable to active network modification. Do not create a bespoke cryptographic protocol to solve this.
+## Credential lifecycle and browser storage
+
+Each phone receives its own revocable 256-bit secret. The browser stores it in IndexedDB under Homer’s canonical origin; the agent keeps the credential-equivalent secret material in owner-only state. It is never placed in ordinary HTTP requests, URLs, logs, diagnostics, analytics, or telemetry. A browser/PWA must not claim that it can store the secret directly in native iOS Keychain or Android Keystore.
+
+Credentials do not rotate or expire on a timer in v0.1. A local user may revoke any phone through Decky, and a connected phone may revoke only itself through its authenticated channel. Revocation immediately closes that phone’s connections and removes its agent-side credential. Intentional Homer uninstall removes all credentials and state.
+
+Ordinary browser asset-cache clearing must not unpair a phone because the credential is held in IndexedDB, not the asset cache. Clearing or losing origin site data removes the browser’s only credential copy and requires the locally approved pairing flow again. The old agent-side record remains valid but inaccessible to that browser until the owner revokes it; the device-management UI must make stale records understandable. Homer must not substitute device fingerprinting, a URL-carried recovery credential, or another hidden identifier for local re-approval.
+
+## Discovery, reconnection, and network binding
+
+The pairing QR initially uses the agent’s current eligible RFC1918 IPv4 address, so first contact does not depend on mDNS. The agent also owns a stable, randomly generated, non-human-derived `.local` hostname. During pairing the browser tests that hostname automatically. When it resolves, a separate short-lived, single-use pre-shared migration claim moves the durable credential to the canonical `.local` browser origin without putting the phone secret in a URL or plaintext request; successful migration removes the credential from the temporary IP origin.
+
+When mDNS is unavailable, Homer may remain on the current IP origin in a visibly degraded discovery mode. It must explain that an address change can require a new locally approved connection. A normal canonical-origin reconnection uses the stored credential and stable hostname without a repeated QR scan or static-IP entry. The agent answers direct queries for its high-entropy hostname but does not advertise an enumerable Homer DNS-SD service; the hostname is a discovery identifier, not an authentication control.
+
+The network service binds only to explicitly selected active RFC1918 LAN addresses, never wildcard, public, global-IPv6, VPN/tunnel, container, or other virtual-interface addresses. Loopback or local IPC may be used for machine-side management. The agent creates no UPnP, NAT-PMP, or other automatic router mapping. If no eligible address exists, Homer stays unavailable and reports why locally. IPv6-only, client-isolated, multicast-blocked without degraded direct-IP reachability, and segmented networks without deliberate local routing are outside the v0.1 compatibility claim.
+
+Binding cannot defeat deliberate router port forwarding because forwarded traffic can arrive at the agent from an apparently local address. The user warning and trusted-LAN requirement therefore remain security controls, not mere documentation.
+
+## First-run disclosure and defense in depth
+
+Decky first run and each new-phone pairing show this meaning before the user continues:
+
+> Homer is for a trusted home network. Control and clipboard messages are encrypted after pairing, but the web interface is loaded over HTTP. A hostile network can tamper with that interface and defeat this protection. Never port-forward Homer or use it on public or shared Wi-Fi.
+
+The user explicitly continues once; normal phone UI retains a compact trusted-LAN status link without repeated interruptions.
+
+Homer must minimise exposed surface area, reject invalid requests, rate-limit failed authentication, avoid permissive cross-origin access, log no sensitive payloads, and end inactive sessions. Static browser assets and cryptographic dependencies must be pinned and reviewable. Application-layer encryption must never be marketed as TLS, HTTPS, protection against an active hostile LAN, or permission to widen Homer’s network boundary.
 
 ## Release gate
 
-Before claiming v0.1 readiness, manually test the pairing-expiry, local-approval, credential revocation, unauthorized-request, and no-internet-exposure behaviors on the supported Bazzite and SteamOS configurations. For a non-Store update path, test fixed-source enforcement, invalid signature/hash rejection, interrupted download handling, atomic activation, health-check rollback, active-session deferral, and the first-use disclosure. For a Store artifact, verify that the Homer update capability, release source, update scheduler, and phone/CLI update routes are absent. The first-run warning must be understandable without security expertise.
+Before claiming v0.1 readiness, test the five-minute pairing window, two-minute approval expiry, single-use bootstrap and migration claims, comparison-code binding, credential issuance/revocation, ten-second handshake deadline, encrypted-message/replay behavior, thirty-second control lease, same-phone reconnection, competing-phone rejection, cache-versus-site-data recovery, mDNS canonical migration, degraded direct-IP behavior, eligible-interface binding, and no-internet-exposure behavior on supported configurations and mobile browsers. Capture no real credentials, clipboard content, device names, or LAN addresses in public test artifacts.
+
+The selected cryptographic implementation must pass official protocol vectors, independent interoperability tests, malformed-input tests, dependency review, and manual inspection before release. For a non-Store update path, test fixed-source enforcement, invalid signature/hash rejection, interrupted download handling, atomic activation, health-check rollback, active-session deferral, and the first-use disclosure. For a Store artifact, verify that the Homer update capability, release source, update scheduler, and phone/CLI update routes are absent. The first-run warning must be understandable without security expertise.

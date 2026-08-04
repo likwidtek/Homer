@@ -86,7 +86,9 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 - The target machine requires local approval through Decky/controller interaction before a phone receives a device-specific credential.
 - Paired phones must be revocable.
 - Future reconnection should use the paired device credential and local machine identity, not repeated QR scans or manually typed IP addresses.
-- v0.1 uses local HTTP and bearer-token authorization under a trusted-LAN threat model. Homer must clearly tell users that HTTP does not provide transport confidentiality or integrity, and that they must never expose its port to the internet (including through port forwarding or automatic router exposure). The agent must not intentionally expose a public-internet listener.
+- v0.1 serves its browser interface over local HTTP/WebSockets under a trusted-LAN threat model, then protects all sensitive remote messages inside an authenticated application-layer encrypted channel derived from the QR bootstrap or paired-phone secret. This protects genuine-client payloads from passive observation but is not HTTPS-equivalent because an active LAN attacker can replace the HTTP-delivered browser code.
+- First pairing contact uses the current eligible private IPv4 address; the browser then automatically prefers a stable random `.local` origin for reconnection across DHCP changes. If mDNS is unavailable, Homer may operate in a clearly disclosed degraded direct-IP mode.
+- Homer must tell users that they must never expose its port to the internet, including through port forwarding or automatic router exposure, and must not use Homer on public/shared Wi-Fi. The agent must not intentionally expose a public-internet listener.
 
 ### Initial platform and validation direction
 
@@ -120,11 +122,15 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 - Decky recovery actions must be explicitly allowlisted, locally auditable, and confirmed before execution. They must not download and execute arbitrary scripts.
 - The QR pairing flow must require a short-lived, single-use bootstrap and local target approval before granting a revocable phone credential.
 - The agent may remain available to already paired phones, but pairing must not be continuously enabled and no LAN request may enable pairing mode.
+- Pairing lasts five minutes, accepts one pending request, uses a six-digit comparison code, and gives the local user two minutes to approve. Each WebSocket has ten seconds to complete its authenticated encryption handshake.
 - Aim not to require root or sudo for the normal Homer agent at runtime. Required permissions for input and basic power actions must be validated on Bazzite and SteamOS before claiming rootless support. One-time setup may still require narrowly scoped elevation.
 - A future elevated recovery helper, if needed, must not accept network requests directly and must expose only a fixed action allowlist.
 - Phone-browser clipboard access is restricted by browser and operating-system permission behavior. The product must use explicit user actions where required and must not promise unsupported background synchronization.
-- Clipboard transfer is text-only and must keep no history, logs, analytics, or background synchronization. Browser-side disclosure and consent for machine-to-phone retrieval persist for the paired browser until changed, revoked, or browser data is cleared.
-- HTTP bearer authorization protects access only within the trusted-LAN model; it does not encrypt traffic or protect against an attacker who can observe or modify local-network traffic. Homer documentation and first-run UI must state this plainly.
+- Clipboard transfer is text-only and must keep no history, logs, analytics, or background synchronization. Browser-side disclosure and consent for machine-to-phone retrieval persist for the paired browser until changed, revoked, or browser site data is cleared.
+- Every sensitive remote message must use the authenticated encrypted channel; Homer must not expose a plaintext input, clipboard, power, status, update, or management fallback. Use an established, independently reviewed pre-shared-key protocol family and pinned implementation rather than bespoke cryptography.
+- The application-layer channel protects payload confidentiality and integrity only when the genuine Homer browser code is running. It does not protect against active modification of that code, hide traffic metadata, or make an untrusted LAN safe. Homer documentation and first-run UI must state this plainly.
+- The phone credential is stored in origin-scoped IndexedDB and is not promised to survive deletion or eviction of browser site data. Ordinary asset-cache clearing should not remove it. Lost site data requires local re-pairing; Homer must not use device fingerprinting or URL-carried recovery credentials.
+- The network service binds only to explicitly selected eligible RFC1918 LAN addresses and creates no automatic router mapping. IPv6-only, client-isolated, and unsupported segmented networks are outside the v0.1 compatibility claim.
 - A sleeping machine cannot run its own agent. A phone browser cannot directly send a raw UDP Wake-on-LAN magic packet. Wake-on-LAN therefore needs an awake local relay/hub or another supported network path.
 - Homer must not collect, transmit, or retain information about users, their machines, or their usage. Platform-provided aggregate repository traffic and release-download counts may inform project health, but must never be described as install or active-user counts.
 
@@ -137,11 +143,13 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 - The architecture does not make Decky mandatory and leaves a credible route toward SteamOS and broader Linux support.
 - If Decky becomes incompatible while the operating system, network, and Homer agent remain healthy, Homer’s v0.1 architecture preserves a planned v0.2 path to restore the Steam/Decky UI through conservative recovery actions.
 - A new phone can pair through the controller-approved QR flow without entering a username, password, or static IP address.
+- A normally paired phone reconnects through the stable local origin after an ordinary DHCP address change; a multicast-hostile network receives a clear degraded-mode explanation rather than a silent failure.
+- Packet capture of a genuine authenticated session does not reveal keyboard, mouse, clipboard, status, power, or management payloads, while first-run language accurately explains the remaining active-LAN risk.
 - The primary text, special-key, and trackpad workflow works in validated Gaming Mode and Desktop Mode configurations, both in and out of a game.
 
 ## Assumptions and proposals (not confirmed requirements)
 
-- The phone web interface may be a progressive web app or another browser-delivered interface.
+- The v0.1 phone interface is a responsive browser page and must not depend on installable-PWA or service-worker behavior that local HTTP origins cannot reliably provide.
 - A Decky plugin may install, start, configure, or display pairing information for the independent agent.
 - A future Decky recovery flow may restart Decky, temporarily disable third-party plugins, and use a versioned, verified repair procedure.
 - The official Decky Store policy treats excessive generative-AI use as a potential rejection reason; Homer’s reviewability and specific Store eligibility must be confirmed before submission.
@@ -156,10 +164,10 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 4. What later multi-machine pairing and management experience should Homer support?
 5. What maximum text size and overflow behavior should clipboard transfer use?
 6. What exact first-run installation route will users without Decky follow, and what permissions will it require on Bazzite and SteamOS?
-7. What exact pairing and bearer-credential lifecycle—issuance, persistence, rotation, revocation, and browser storage—fits the trusted-LAN HTTP model?
+7. Which reviewed pre-shared-key protocol pattern, pinned implementation, and browser build approach satisfy D-039’s test and review gates for the approved implementation languages?
 8. Is Homer eligible for distribution through the official Decky store when its plugin bootstraps an independent service? This must be confirmed with Decky maintainers; public terms/policy were not located during initial research.
 9. Which exact Decky recovery actions are safe enough for v0.2, and which permissions do they require on Bazzite and SteamOS?
-10. Can an independently reviewed application-layer encryption design offer meaningful passive-observer defense-in-depth after pairing without weakening the trusted-LAN HTTP model or creating an unsafe bespoke cryptographic protocol?
+10. Which exact supported mobile browser versions pass encrypted-channel, IndexedDB, mDNS migration, and degraded direct-IP validation?
 11. What should the exact local-approval UX be when a new phone scans the QR code but the Steam UI is partially unhealthy?
 12. What Bazzite and SteamOS permissions are required for rootless input injection, clipboard access, and basic power actions?
 13. What versioned packaging and compatibility contract keeps the independently updated agent and GitHub-delivered Decky plugin synchronized without allowing Homer to update Decky itself?

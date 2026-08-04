@@ -13,7 +13,7 @@ Homer is currently in product design. It is not yet installable and no applicati
 - Native phone text entry, common special keys, and trackpad/mouse input with left, middle, right click, two-finger scrolling, and two-finger right click.
 - Explicit phone-to-machine text transfer and consented, text-only machine-to-phone clipboard retrieval. Homer keeps no clipboard history, logs, analytics, or background synchronization.
 - Restart, graceful shutdown, and sleep with deliberate confirmation; restart and shutdown are cancellable.
-- QR pairing with short-lived bootstrap, local target approval, and revocable phone credentials.
+- QR pairing with a short-lived single-use bootstrap, encrypted handshake, matching phone/machine confirmation code, local target approval, and revocable phone credentials.
 - Decky-first installation through GitHub releases, bootstrapping an agent that remains functional if Decky later fails.
 - Bazzite and SteamOS as required initial targets, with Bazzite-first hands-on testing and direct SteamOS validation before release claims.
 
@@ -23,7 +23,7 @@ Homer is local-network-only. It has no accounts, cloud relays, remote internet a
 
 The phone client will never provide arbitrary shell or terminal access. Privileged behavior, if needed, is limited to fixed, audited, deliberately confirmed actions. The normal agent aims to run rootlessly; required permissions remain to be validated.
 
-v0.1 uses bearer-authorized HTTP/WebSockets only on a trusted home LAN; it is not encrypted transport. Users must never port-forward or otherwise expose Homer to the internet. See the [security and connection model](docs/SECURITY.md).
+v0.1 serves its browser interface over HTTP on a trusted home LAN, then uses authenticated application-layer encryption for keyboard, mouse, clipboard, status, power, and management messages. This is not HTTPS: an active hostile network can modify the browser interface and defeat that protection. Users must never port-forward Homer or use it on public/shared Wi-Fi. See the [security and connection model](docs/SECURITY.md).
 
 ## Not in v0.1
 
