@@ -257,3 +257,17 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Date:** 2026-08-03
 - **Decision:** Official Decky Plugin Store, GitHub-sideloaded Decky, and standalone installations use separate distribution artifacts, not a writable channel marker. The Store artifact excludes Homer-managed update code and interfaces, including checking, downloading, installation, release-source configuration, automatic scheduling, and phone/CLI update routes. The sideloaded-Decky and standalone artifacts may contain only D-033’s bounded updater. Store build/review evidence must demonstrate that update capability is absent from its artifact. Homer does not attempt to prevent a machine owner from deliberately replacing their installed software, but no paired phone, network request, or editable configuration may convert a Store artifact into a self-updating artifact.
 - **Rationale:** An editable marker would not be a meaningful trust boundary. Separate artifacts give users and Store reviewers an auditable, technical guarantee that an official Store build cannot quietly acquire a Homer-managed update path.
+
+## D-037 — v0.1 delivery channels
+
+- **Status:** Accepted
+- **Date:** 2026-08-03
+- **Decision:** Homer v0.1 is delivered Decky-first through GitHub releases, with a signed portable user-space standalone bundle as the no-Decky and recovery route. `ujust`, Bazzite Portal, Bazaar/Flatpak, Homebrew, and RPM layering are not Homer v0.1 delivery channels. Any later package-manager channel requires its own explicit update-ownership and compatibility decision.
+- **Rationale:** Decky is the lowest-friction initial path. A portable user-space bundle preserves independent operation without tying Homer to a particular Linux package manager or weakening its host-integration requirements. Avoiding Bazzite-specific and system-layered installation methods keeps v0.1 supportable and consistent with least privilege.
+
+## D-038 — Narrow initial compatibility claim
+
+- **Status:** Accepted
+- **Date:** 2026-08-03
+- **Decision:** Initial compatibility claims are limited to the tested Bazzite KDE Desktop Mode and Steam Gaming Mode configuration, and the tested current-stable Steam Deck/SteamOS configuration. Homer makes no v0.1 claim for Bazzite GNOME, NVIDIA-specific behavior, other desktop environments, other hardware, or untested SteamOS variants.
+- **Rationale:** Bazzite and SteamOS vary materially by desktop environment, compositor, hardware, and configuration. A narrow claim gives the project a reliable Bazzite-first start and prevents unvalidated support promises.

@@ -66,6 +66,7 @@ Let a user use their phone browser as a quick keyboard and trackpad/mouse compan
 - The independent agent runs as the normal couch-gaming Linux user’s background service and starts with that user’s graphical session. It remains available across Steam Gaming Mode, Desktop Mode, and Steam-profile changes, but is unavailable before that Linux user logs in after boot. A Decky failure does not stop it; an intentional Homer uninstall removes the agent and its local state.
 - The independent agent owns the local service, credentials, exclusive control-session state, fixed input/clipboard/power requests, updates, and Homer state. The Decky plugin owns installation/bootstrap, status, device management, and local pairing enablement/approval. The phone browser owns only the authenticated user experience. A local machine interface may manage installation, status, manual checks, and uninstall, but is not a remote-control or second phone-facing API. If Decky is unavailable, already paired phones continue to work but new pairing is unavailable in v0.1.
 - Store, sideloaded-Decky, and standalone installations use separate distribution artifacts rather than a writable update-channel marker. The Store artifact contains no Homer-managed update capability; the sideloaded-Decky and standalone artifacts contain only the bounded non-Store updater. A machine owner can deliberately replace installed software, but no paired phone, network request, or editable configuration may turn a Store artifact into a self-updating artifact.
+- v0.1 delivery is Decky-first through GitHub releases, with a signed portable user-space standalone bundle as the no-Decky and recovery route. Do not make `ujust`, Bazzite Portal, Bazaar/Flatpak, Homebrew, or RPM layering a v0.1 Homer delivery channel. A future package-manager channel must define its own update ownership and compatibility contract before it is added.
 
 ### Future Decky recovery direction
 
@@ -91,6 +92,7 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 
 - SteamOS and Bazzite are required initial targets.
 - Begin hands-on testing on the project owner’s Bazzite machine, then validate SteamOS directly before making v0.1 compatibility claims.
+- Initial compatibility claims are limited to the tested Bazzite KDE Desktop Mode and Steam Gaming Mode configuration, and the tested current-stable Steam Deck/SteamOS configuration. Do not claim Bazzite GNOME, NVIDIA-specific behavior, other desktop environments, other hardware, or untested SteamOS variants until separately validated.
 
 ## Explicit v0.1 non-goals
 
@@ -161,3 +163,4 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 11. What should the exact local-approval UX be when a new phone scans the QR code but the Steam UI is partially unhealthy?
 12. What Bazzite and SteamOS permissions are required for rootless input injection, clipboard access, and basic power actions?
 13. What versioned packaging and compatibility contract keeps the independently updated agent and GitHub-delivered Decky plugin synchronized without allowing Homer to update Decky itself?
+14. What exact portable standalone installation, upgrade, uninstall, and state-location experience is validated for Bazzite and SteamOS?
