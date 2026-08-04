@@ -236,3 +236,24 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Date:** 2026-08-03
 - **Decision:** The installation channel owns Homer updates. Official Decky Plugin Store installations use Decky’s update path exclusively and show the installed version only. GitHub-sideloaded Decky and standalone installations may manually check for and install updates from Homer’s fixed official source. Their first manual check may invite, but must not require, opt-in to automatic checks or automatic checks and installation; the user may choose a daily or weekly schedule. Any paired/authorized phone or the local machine may request a manual check or installation. Automatic installation waits for no active remote control session. Updates must use signed metadata and artifacts, hash verification, staged atomic activation, a health check, and automatic rollback. Homer must not update Decky Loader or its plugin files through this path.
 - **Rationale:** This gives non-Store users a set-it-and-forget-it option without making every installation a remote updater, while respecting Decky’s ownership and review model for Store installations. The bounded verification and rollback rules keep the convenience path narrow, auditable, and recoverable.
+
+## D-034 — User-session independent-agent lifecycle
+
+- **Status:** Accepted
+- **Date:** 2026-08-03
+- **Decision:** Homer’s independent agent runs as the normal couch-gaming Linux user’s background service and starts with that user’s graphical session. It remains available across Steam Gaming Mode, Desktop Mode, and Steam-profile changes. It is unavailable before that Linux user logs in after boot. Decky failure, disablement, or Steam UI trouble must not stop an already-running agent. An intentional Homer uninstall stops the agent and removes its local state.
+- **Rationale:** This keeps the network-facing runtime rootless and tied to the user who owns the desktop/input session, avoids duplicate services for shared Steam profiles, and preserves Homer’s independent recovery value without introducing a pre-login privileged service.
+
+## D-035 — v0.1 component boundaries and Decky-unavailable pairing
+
+- **Status:** Accepted
+- **Date:** 2026-08-03
+- **Decision:** The independent agent owns the local HTTP/WebSocket service, paired-device credentials, exclusive control-session state, fixed input/clipboard/power requests, non-Store update verification and rollback, and persistent Homer state. The Decky plugin owns installation/bootstrap, service status, device management, and local pairing-mode enablement and approval. The phone browser owns the authenticated control and consent experience only. A local machine interface may manage installation, status, manual update checks, and uninstall, but is neither a remote-control surface nor a second phone-facing API. If Decky is unavailable, already paired phones remain usable but new pairing is unavailable in v0.1.
+- **Rationale:** This keeps sensitive machine authority in the independent local agent, makes the browser and Decky layers narrow and reviewable, and avoids weakening pairing with an unvalidated fallback approval path while retaining usefulness during a Decky failure.
+
+## D-036 — Separate Store and non-Store update artifacts
+
+- **Status:** Accepted
+- **Date:** 2026-08-03
+- **Decision:** Official Decky Plugin Store, GitHub-sideloaded Decky, and standalone installations use separate distribution artifacts, not a writable channel marker. The Store artifact excludes Homer-managed update code and interfaces, including checking, downloading, installation, release-source configuration, automatic scheduling, and phone/CLI update routes. The sideloaded-Decky and standalone artifacts may contain only D-033’s bounded updater. Store build/review evidence must demonstrate that update capability is absent from its artifact. Homer does not attempt to prevent a machine owner from deliberately replacing their installed software, but no paired phone, network request, or editable configuration may convert a Store artifact into a self-updating artifact.
+- **Rationale:** An editable marker would not be a meaningful trust boundary. Separate artifacts give users and Store reviewers an auditable, technical guarantee that an official Store build cannot quietly acquire a Homer-managed update path.

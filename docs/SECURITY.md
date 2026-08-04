@@ -22,7 +22,9 @@ The updater is not a general downloader or remote-command feature. It must use o
 
 The update UI must disclose that the release source receives ordinary request metadata under that source’s privacy practices. Homer must not add its own device identifier, usage payload, installation-success ping, or heartbeat. Platform-provided aggregate release-download statistics remain downloads, not confirmed installations or successful updates.
 
-Homer must determine the update policy from trusted installation metadata, not from a remote assertion. A Store installation must disable Homer-managed checking, downloading, and installation and show the installed version only. Homer must not update Decky Loader or its plugin files through this path; if an agent update requires a newer Decky-facing component, it must fail safely and direct the user to Decky’s appropriate update mechanism.
+Store, sideloaded-Decky, and standalone installations must be separate distribution artifacts, not one artifact controlled by a writable update-channel marker. The Store artifact must exclude Homer-managed checking, downloading, installation, release-source configuration, automatic-update scheduling, and phone/CLI update routes; it shows the installed version only. Store release evidence must demonstrate that those capabilities are absent. A machine owner may deliberately replace installed software, but no paired phone, network request, or editable configuration may turn a Store artifact into a self-updating artifact.
+
+Homer must not update Decky Loader or its plugin files through its non-Store path; if an agent update requires a newer Decky-facing component, it must fail safely and direct the user to Decky’s appropriate update mechanism.
 
 ## Threat model
 
@@ -61,4 +63,4 @@ Application-layer encrypted payloads may be investigated as a later, independent
 
 ## Release gate
 
-Before claiming v0.1 readiness, manually test the pairing-expiry, local-approval, credential revocation, unauthorized-request, and no-internet-exposure behaviors on the supported Bazzite and SteamOS configurations. For a non-Store update path, test fixed-source enforcement, invalid signature/hash rejection, interrupted download handling, atomic activation, health-check rollback, active-session deferral, Store-mode disablement, and the first-use disclosure. The first-run warning must be understandable without security expertise.
+Before claiming v0.1 readiness, manually test the pairing-expiry, local-approval, credential revocation, unauthorized-request, and no-internet-exposure behaviors on the supported Bazzite and SteamOS configurations. For a non-Store update path, test fixed-source enforcement, invalid signature/hash rejection, interrupted download handling, atomic activation, health-check rollback, active-session deferral, and the first-use disclosure. For a Store artifact, verify that the Homer update capability, release source, update scheduler, and phone/CLI update routes are absent. The first-run warning must be understandable without security expertise.
