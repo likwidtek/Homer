@@ -21,7 +21,7 @@ Use the applicable documents in addition to the three files above:
 | Security, pairing, transport, sensitive data, or permissions | `docs/SECURITY.md`, then `docs/PUBLISHING.md` if any public artifact may change |
 | Phone controls, clipboard, power actions, or consent | `docs/INTERACTION.md` |
 | Architecture, runtime lifecycle, packaging, or update design | `docs/PRODUCT.md`, `docs/DECISIONS.md`, `docs/SECURITY.md`, and `docs/INTERACTION.md` |
-| Testing, compatibility, or release claims | `docs/PRODUCT.md`, `docs/SECURITY.md`, and the relevant interaction/architecture documents |
+| Testing, compatibility, or release claims | `docs/PRODUCT.md`, `docs/SECURITY.md`, `docs/TESTING.md` when present, and the relevant interaction/architecture documents |
 | Deferring scope | `docs/ROADMAP.md` |
 | Any commit or push | `docs/PUBLISHING.md` |
 
