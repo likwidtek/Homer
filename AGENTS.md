@@ -45,6 +45,10 @@ When the user signals a closeout:
 
 A closeout signal does not by itself authorize a commit, push, external message, task archive, or task rename; obtain explicit approval for each permanent or external action unless the current request already unambiguously grants it.
 
+## Task and context guidance
+
+Actively advise the user when work should remain in the current task, move to a branch of the current task, or start a fresh task with a handoff. Base that recommendation on workstream ownership, dependency boundaries, context drift, and the cost of carrying unrelated history. Do not interrupt a coherent workstream merely because it is long. Before a transition, identify the recommended destination, explain why it is useful, and preserve the current state through the handoff rules above.
+
 ## Public repository safety
 
 `main` is the public source of truth. `docs/SESSION.md` and `docs/private/` are local-only and must never be committed or pushed. Before every push, follow `docs/PUBLISHING.md`, run the required preflight, and never use `git push --no-verify` to bypass it.

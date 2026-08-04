@@ -58,6 +58,17 @@ At a user-requested closeout, assess completion rather than assuming it. Report 
 
 A closeout signal alone does not authorize a commit, push, external message, task archive, or task rename. Obtain explicit approval for each such action unless the current user request already unambiguously grants it. Recommend whether the task should be archived as complete, retained for testing or waiting, marked blocked, or continued as follow-on work.
 
+## Task and context transitions
+
+The assistant is responsible for telling the project owner when the current task remains the best context and when a task transition would improve clarity or reduce drift. Use these defaults:
+
+- Continue the current task while the objective, governing documents, and decision chain remain coherent.
+- Branch the current task when a bounded specialist workstream needs the current context but can progress or be reviewed independently, such as a security review arising from architecture work.
+- Start a fresh task with a handoff when beginning a new work category, when the prior objective is complete, when unrelated history materially obscures the new goal, or when a clean approval or implementation context is safer than carrying exploratory discussion forward.
+- Resume an existing specialist task instead of creating a duplicate when that task already owns the workstream.
+
+Do not recommend transitions mechanically based on conversation length alone. Consider dependency ownership, unresolved approvals, duplicated work risk, context drift, and efficient use of the available context and model budget. When recommending a transition, state whether to continue, branch, resume, or start fresh; explain the boundary; and provide or update the required handoff before work moves.
+
 ## AI-oriented files
 
 Repository instructions such as `AGENTS.md` are public when they contain durable project context and reviewable workflow rules. Keep them short, self-contained, and task-agnostic enough to help a new contributor. Store personal AI preferences in the user’s tool settings or private context; Homer’s local project-specific location is `docs/private/OPERATOR.md`.
