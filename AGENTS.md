@@ -22,10 +22,15 @@ Use the applicable documents in addition to the three files above:
 | Phone controls, clipboard, power actions, or consent | `docs/INTERACTION.md` |
 | Architecture, runtime lifecycle, packaging, or update design | `docs/PRODUCT.md`, `docs/DECISIONS.md`, `docs/SECURITY.md`, and `docs/INTERACTION.md` |
 | Testing, compatibility, or release claims | `docs/PRODUCT.md`, `docs/SECURITY.md`, `docs/TESTING.md` when present, and the relevant interaction/architecture documents |
+| Development or test-device changes | `docs/TESTING.md` and `docs/DOCUMENTATION.md` |
 | Deferring scope | `docs/ROADMAP.md` |
 | Any commit or push | `docs/PUBLISHING.md` |
 
 Review this file and `docs/DOCUMENTATION.md` at the start of a new work category, before approving an implementation plan, and after a documentation/privacy incident. Keep this file concise and limited to durable repository-wide instructions; put detailed policy and rationale in `docs/DOCUMENTATION.md`.
+
+## Development and test environments
+
+Before making a persistent, security-relevant, or result-affecting change to any development or test device, follow `docs/TESTING.md` and record the planned change, reason, baseline impact, and rollback in the central private environment ledger. Read-only inspection and ephemeral work removed within the same operation do not require entries. If the central ledger is unavailable to a remote task, return a concise change receipt to the coordinating task before another device change. At handoff and closeout, reconcile active changes and prompt for rollback when their purpose has ended.
 
 ## Product and implementation guardrails
 

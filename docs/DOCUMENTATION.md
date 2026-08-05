@@ -19,7 +19,7 @@ All tracked documentation is public. It may contain product intent, security lim
 
 Do not track personal working context, raw AI prompts or conversation transcripts, hidden reasoning, unreviewed research dumps, private to-do lists, device names, LAN addresses, screenshots, logs, captures, clipboard content, credentials, pairing material, certificates, customer information, or vulnerability details before coordinated disclosure.
 
-`docs/SESSION.md` is the single local handoff record and is ignored. Other private documentation belongs under `docs/private/`, which is also ignored. `docs/private/OPERATOR.md` is the designated local collaboration-preference file. Private documents may shape personal workflow but cannot silently override public repository requirements. Neither may be staged, committed, or pushed. The pre-push gate rejects either path if it becomes tracked.
+`docs/SESSION.md` is the single local handoff record and is ignored. Other private documentation belongs under `docs/private/`, which is also ignored. `docs/private/OPERATOR.md` is the designated local collaboration-preference file. `docs/private/ENVIRONMENT_CHANGES.md` is the central local record of persistent development and test-device changes, rollback obligations, and baseline deviations. Private documents may shape personal workflow but cannot silently override public repository requirements. None may be staged, committed, or pushed. The pre-push gate rejects these paths if they become tracked.
 
 ## Document map and authority
 
@@ -34,6 +34,7 @@ Do not track personal working context, raw AI prompts or conversation transcript
 | `docs/PUBLISHING.md` | Public-repository and release hygiene | Publication workflow, review gates, or repository protection changes |
 | `AGENTS.md` | Durable, repository-wide instructions for human and AI contributors | A cross-cutting workflow, safety rule, or required reading route changes |
 | `docs/private/OPERATOR.md` | Local personal collaboration preferences; never a public project requirement | The project owner changes local collaboration preferences; never stage it |
+| `docs/private/ENVIRONMENT_CHANGES.md` | Central private development/test-device change and rollback ledger | A persistent, security-relevant, or result-affecting device change is planned, executed, retained, or rolled back; never stage it |
 | `docs/ARCHITECTURE.md` | Approved component boundaries, lifecycle, interfaces, and tradeoffs | Architecture is approved; do not create it for speculative designs |
 | `docs/TESTING.md` | Approved test strategy, supported matrix, and release criteria | A test plan becomes stable enough to guide implementation or release claims |
 | `docs/INSTALLATION.md` | Validated user installation and recovery instructions | An install/recovery route has been validated; never document aspirational steps as instructions |

@@ -8,6 +8,27 @@ Phase 0 architecture validation is approved. This document defines the evidence 
 
 Determine whether the provisional Python/TypeScript architecture can satisfy Homer’s accepted packaging, lifecycle, platform, security, and browser requirements. Phase 0 produces evidence and decisions, not production components.
 
+## Development and test-device change control
+
+Use one private environment-change ledger on the primary development workstation as the source of truth for persistent changes made to any development or test device. This policy applies throughout development and testing, not only Phase 0. The authoritative ledger is `docs/private/ENVIRONMENT_CHANGES.md`; it is local-only and must never be staged, committed, or pushed. Remote devices do not maintain competing authoritative ledgers.
+
+Log a change when it persists beyond the immediate operation, changes security or permissions, installs or removes tooling, starts or enables a service, changes an account or credential, alters network/firewall behavior, or could affect whether a result represents an ordinary user environment. Read-only inspection, no-op commands, and temporary files or processes removed within the same operation do not require entries unless an unexpected effect remains.
+
+Before execution, record a compact entry containing:
+
+- a stable change ID, device alias, workstream, and date;
+- the intended change, reason, and approval status;
+- whether it is temporary or an accepted baseline requirement;
+- baseline impact as tooling-only, security-affecting, capability-affecting, or none;
+- the action and verification method; and
+- the rollback action and the event that should trigger it.
+
+After execution, update only the observed result and status: `active`, `retained`, `rollback-due`, `rolled-back`, or `reconstructed/unknown`. One entry may cover a tightly related batch with the same purpose and rollback. Do not duplicate command output, test evidence, secrets, or raw logs in the ledger. Prefer device aliases over raw machine identifiers; include a local identifier only when safe rollback cannot be performed without it.
+
+When work runs on a remote device and cannot update the central ledger directly, it must return a compact change receipt with the same fields through the existing secure management path. The coordinating task merges that receipt into the central ledger. Planned persistent changes should wait for that merge; urgent recovery work must be reconstructed immediately afterward.
+
+At every device-related handoff and closeout, review active entries relevant to the work, identify changes whose purpose has ended, and either roll them back or obtain explicit approval to retain them. Compatibility and security conclusions must state whether they came from an ordinary baseline, a tooling-only deviation, or a capability/security-affecting deviation. Critical results influenced by a temporary deviation must be repeated after rollback or document that deviation as a required prerequisite.
+
 ## Track A — Python runtime and packaging
 
 Evaluate a CPython `asyncio` agent using `aiohttp` and a PyInstaller one-folder artifact. Evaluate Nuitka only if PyInstaller materially fails a gate.
@@ -26,6 +47,15 @@ Validate that the artifact:
 The candidate passes when it becomes ready within three seconds in ten consecutive starts, has no failed start in 50 restarts, averages less than one percent idle CPU over ten minutes, uses no more than 100 MB idle resident memory, grows by no more than 10 MB without explanation over 24 hours, occupies no more than 150 MB installed and 75 MB compressed, and leaves a complete runnable old or new version after every simulated activation failure.
 
 ## Track B — Bazzite and SteamOS capabilities
+
+### Host-access preflight
+
+Before a probe that requires SSH or live graphical-session access, establish a local-console recovery path and a verified, non-default account credential where the platform requires one. Do not treat passwordless `sudo` as evidence that password-based SSH is configured or usable.
+
+- On Bazzite, use the test account's locally managed password when SSH password authentication is temporarily needed. A deployment that permits passwordless elevation may still require the account password for SSH.
+- On SteamOS/Steam Deck, set a unique password for the desktop account locally before attempting SSH; the default account is shipped without one.
+- Prefer an authorized tester public key after the initial local setup. Verify key-based login in a second session before disabling SSH password authentication, and obtain separate approval before changing SSH, firewall, network, or account settings.
+- Never record, transmit, paste into test artifacts, or reuse a real account password. Record only that the host-access preflight passed and the authentication method used.
 
 Using synthetic text and safe test targets, validate:
 
