@@ -47,7 +47,7 @@ The maximum text size and overflow behavior remain implementation bounds to spec
 
 Sleep, graceful shutdown, and restart are available only as named actions. Each requires an explicit confirmation in the phone UI. Restart and shutdown include a visible short countdown with cancellation; the exact duration is an implementation parameter to validate. Homer does not expose arbitrary commands or a terminal.
 
-The normal agent first uses the operating system’s stock graphical-session authorization. Where that cannot perform the action unattended, setup may offer a deliberate one-time installation of Homer’s optional fixed-purpose local power helper. If the helper is unavailable or declined, affected controls are clearly disabled or hidden rather than failing after confirmation.
+The normal agent first uses the operating system’s stock graphical-session authorization. Where that cannot perform the action unattended, setup may offer a deliberate local installation of Homer’s optional fixed-purpose power helper. A phone cannot install, update, or remove it. Restart/shutdown cancellation remains available only until the unprivileged countdown finishes; the agent then dispatches one immediate fixed action. If the helper is unavailable, declined, unhealthy, or incompatible, affected controls are clearly disabled or hidden rather than failing after confirmation.
 
 ## Connected phones and control sessions
 

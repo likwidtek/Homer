@@ -62,12 +62,12 @@ Using synthetic text and safe test targets, validate:
 - rootless text and special-key injection in KDE, Steam Gaming Mode, in-game, and out-of-game fields;
 - relative pointer motion, left/middle/right clicks, and scrolling without gamepad emulation or controller interception;
 - connected-only clipboard observation and synthetic text setting, with monitoring stopped after disconnect;
-- stock graphical-user-service authorization for fixed sleep, restart, and shutdown requests, plus the proposed helper boundary where stock policy remains challenged;
+- stock graphical-user-service authorization for fixed sleep, restart, and shutdown requests, plus the D-051 helper boundary where stock policy remains challenged;
 - service continuity across Steam-profile changes, Decky stopping, and Gaming/Desktop Mode transitions;
 - binding only to explicitly eligible LAN addresses while excluding wildcard, public, global-IPv6, VPN, tunnel, container, and virtual-interface addresses; and
 - stable random `.local` resolution in each claimed mode, phone-side qualification before migration, prevention of migration after a known cross-mode failure, and visibly degraded direct-IP operation when mDNS is unavailable or unqualified.
 
-The candidate passes only for configurations where accepted functionality works within the documented rootless-agent boundary. A power-helper path must demonstrate fixed local-only IPC, an exact action allowlist, no network listener, no blanket polkit rule, no arbitrary command path, deliberate installation, and clean removal. Any one-time setup or privileged probe must be identified precisely and separately approved before it changes the machine.
+The candidate passes only for configurations where accepted functionality works within the documented rootless-agent boundary. A power-helper path first uses a harmless non-power backend to demonstrate deliberate local installation, fixed versioned Unix IPC, configured-user peer validation, rejection of other users and malformed/unknown/version-mismatched requests, the exact three-action interface, no network listener, no polkit rule, no arbitrary command or privileged cancellation path, service hardening, fail-closed agent behavior, audit behavior, and clean removal. Only after that boundary passes may a separately approved and immediately warned real power test validate the logind call and inhibitor behavior. Automatic or phone-triggered helper installation, replacement, or removal fails the candidate. Any one-time setup or privileged probe must be identified precisely, recorded under device-change control, and separately approved before it changes the machine.
 
 ## Track C — encrypted-channel selection
 

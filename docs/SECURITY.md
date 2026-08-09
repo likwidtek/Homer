@@ -40,7 +40,11 @@ The project must continue to use least privilege, narrow fixed action allowlists
 
 The network-facing agent remains the normal graphical-session user. It uses stock logind interfaces when the operating system authorizes that context. Homer must not install a blanket polkit rule or treat phone confirmation as a substitute for required OS authorization.
 
-If a supported configuration requires interactive authorization, Homer may offer a deliberate one-time local installation of an optional, removable, fixed-purpose privileged power helper. The helper has no network listener, receives only narrow local IPC from the agent, exposes only sleep, restart, shutdown, and required cancellation, and cannot execute caller-supplied commands or arguments outside that allowlist. Its package, installation, IPC authorization, audit trail, and uninstall behavior are release-review dependencies. Without stock authorization or the helper, unavailable power actions remain unavailable.
+The tested Bazzite background user-service context requires D-051’s optional, removable, fixed-purpose privileged power helper. Its installation, replacement, and removal require deliberate local elevation and cannot be requested by a phone or performed by Homer’s automatic updater. Store inclusion requires explicit Decky-maintainer acceptance; an artifact without the helper disables the unavailable power controls.
+
+The helper is an on-demand local service with no network listener. It accepts exactly one immediate `sleep`, `restart`, or `shutdown` operation through local Unix IPC from the configured Homer user, authenticated with kernel peer credentials and a fixed versioned protocol. It invokes logind without interactive authorization so the operating system still handles inhibitors. It has no shell, caller-supplied arguments, generic subprocess path, configuration-selected commands, polkit rule, or privileged cancellation method. Confirmation, countdown, and cancellation finish in the unprivileged agent before dispatch. The helper fails closed when absent, unhealthy, or incompatible.
+
+This boundary does not distinguish Homer from every other process already running as the configured local user; such a process could request one of the three power actions. That local-account risk is explicit. The helper’s package, implementation language, service hardening, IPC parser, peer check, protocol compatibility, audit trail, installation, and clean removal remain release-review dependencies.
 
 ## Service and pairing availability
 
