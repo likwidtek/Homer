@@ -348,3 +348,10 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Date:** 2026-08-08
 - **Decision:** Direct private IPv4 remains Homer’s first-contact path and a first-class visibly degraded operating mode. Homer migrates a phone credential to the stable random `.local` origin only when the supported platform/configuration is eligible for canonical migration and that phone validates the hostname in the relevant environment; a single Desktop Mode success must not override a known cross-mode failure. Homer does not retain duplicate durable credentials at both IP and `.local` origins. Configurations that fail qualification remain on the IP origin and warn that an address change can require local reconnection. Silent recovery or automatic requalification after a later mode transition is not required in v0.1.
 - **Rationale:** Origin-scoped browser credentials make an unreliable canonical hostname worse than a disclosed IP fallback, while retaining credentials at a recycled IP origin creates avoidable exposure. Qualification preserves convenient DHCP-resistant reconnection where it is reliable without stranding users on tested multicast-hostile configurations or weakening the accepted credential boundary.
+
+## D-050 — Minimal-first implementation discipline
+
+- **Status:** Accepted
+- **Date:** 2026-08-08
+- **Decision:** Homer uses a present-need, reuse-first decision ladder for code, configuration, abstractions, dependencies, and documentation changes. Prefer existing project patterns, then standard-library or native-platform capabilities, before adding a new dependency or bespoke layer. Implement the smallest complete, reviewable change that satisfies accepted requirements, avoid speculative scaffolding, and fix defects at their narrowest correct shared cause. “Minimal” never means code golf, reduced required testing, weakened security/privacy/accessibility/data-loss safeguards/compatibility, or silently reduced accepted scope.
+- **Rationale:** This reduces unnecessary maintenance, dependency surface, review burden, and agent work while preserving the safeguards and validation Homer explicitly requires.
