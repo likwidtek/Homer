@@ -50,6 +50,7 @@ This is a collection of future and deferred ideas from product discussion. It is
 - Confirm official Decky Store policy and eligibility, including its expectations for AI-assisted development and a plugin that bootstraps an independent agent.
 - Easier installation without a physical keyboard/mouse, including controller-first paths where feasible.
 - Independent installation for non-Decky users and recovery situations where Decky is unavailable.
+- Silent mDNS recovery or automatic `.local` requalification after a later session-mode transition; v0.1 stays on visibly degraded direct IP until a fresh locally approved reconnection when canonical discovery was not qualified.
 
 ## Deferred: multi-machine and Wake-on-LAN evolution
 

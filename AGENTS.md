@@ -32,6 +32,12 @@ Review this file and `docs/DOCUMENTATION.md` at the start of a new work category
 
 Before making a persistent, security-relevant, or result-affecting change to any development or test device, follow `docs/TESTING.md` and record the planned change, reason, baseline impact, and rollback in the central private environment ledger. Read-only inspection and ephemeral work removed within the same operation do not require entries. If the central ledger is unavailable to a remote task, return a concise change receipt to the coordinating task before another device change. At handoff and closeout, reconcile active changes and prompt for rollback when their purpose has ended.
 
+## Autonomy and approval boundaries
+
+Once the user approves a plan or asks to change, build, fix, or run a bounded work package, continue through its safe in-scope steps without asking for routine confirmation. This includes read-only inspection and research, in-scope workspace edits, non-destructive validation, and self-cleaning ephemeral probes already allowed by the approved test plan. If one step is blocked, continue other independent safe work before returning to the user. Batch foreseeable approval needs into the fewest clear checkpoints.
+
+Stop for user approval before a commit or push, external write, destructive or difficult-to-recover action, purchase, material scope expansion, use of secrets not already authorized, elevation, real power action, or a persistent, security-relevant, or result-affecting device change governed above. An informational progress update is not an approval request. Do not repeat an approval already granted for the same bounded action unless its target, risk, or scope changes.
+
 ## Product and implementation guardrails
 
 Decky is the initial distribution path, but the Homer agent must remain an independently managed runtime. Do not expose arbitrary shell access through the phone client; privileged operations must be fixed, audited actions with deliberate confirmation.

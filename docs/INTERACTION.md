@@ -10,7 +10,7 @@ The user starts pairing locally in Decky. A pairing QR remains valid for five mi
 
 Decky first run and each new phone explain once that Homer is for a trusted home network, sensitive messages are encrypted after pairing, the browser interface itself is delivered over HTTP, and an active hostile network can defeat that protection. The user explicitly continues. The normal phone interface then keeps only a compact trusted-LAN status link.
 
-The connection begins through the machine’s current private address and automatically moves to its stable `.local` identity when supported. If local discovery is blocked, the phone remains usable through the current address and clearly explains that an address change may require locally approved reconnection. Users never type or configure a static address.
+The connection begins through the machine’s current private address and moves to its stable `.local` identity only after that phone and supported configuration qualify it as reliable. If local discovery is blocked or fails across a supported mode change, the phone remains usable through the current address and clearly explains that an address change may require locally approved reconnection. Users never type or configure a static address, and Homer does not keep the phone credential at both origins.
 
 ## Keyboard
 
@@ -46,6 +46,8 @@ The maximum text size and overflow behavior remain implementation bounds to spec
 ## Power actions
 
 Sleep, graceful shutdown, and restart are available only as named actions. Each requires an explicit confirmation in the phone UI. Restart and shutdown include a visible short countdown with cancellation; the exact duration is an implementation parameter to validate. Homer does not expose arbitrary commands or a terminal.
+
+The normal agent first uses the operating system’s stock graphical-session authorization. Where that cannot perform the action unattended, setup may offer a deliberate one-time installation of Homer’s optional fixed-purpose local power helper. If the helper is unavailable or declined, affected controls are clearly disabled or hidden rather than failing after confirmation.
 
 ## Connected phones and control sessions
 

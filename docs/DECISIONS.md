@@ -327,3 +327,24 @@ These records capture consequential decisions explicitly stated or approved in p
 - **Date:** 2026-08-04
 - **Decision:** Persistent, security-relevant, or result-affecting changes made to development and test devices must be recorded in one private environment-change ledger on the primary development workstation. Each entry identifies why the change exists, whether it departs from an ordinary user environment, how it is verified, when it should be reconsidered, and how it is rolled back. Remote tasks return compact change receipts to the coordinating task instead of maintaining competing authoritative ledgers. Device-related handoffs and closeouts reconcile active changes and prompt for rollback or explicit retention. Read-only and self-cleaning ephemeral work is excluded.
 - **Rationale:** Development and compatibility work can otherwise accumulate forgotten services, permissions, tooling, and configuration that weaken security or produce misleading results. A single concise ledger preserves rollback accountability and baseline clarity without adding an external system or logging every command.
+
+## D-047 — Approval-efficient autonomous work
+
+- **Status:** Accepted
+- **Date:** 2026-08-08
+- **Decision:** Approval of a bounded plan or a request to change, build, fix, or execute authorizes Codex to complete all safe in-scope intermediate work without repeated confirmation. Safe work includes read-only inspection and research, in-scope workspace edits, non-destructive validation, and approved self-cleaning ephemeral probes. Codex should continue independent safe work around a blocked step and batch foreseeable approval needs. Fresh approval remains required for commits and pushes, external writes, destructive or difficult-to-recover actions, purchases, material scope expansion, unauthorized secret use, elevation, real power actions, and persistent, security-relevant, or result-affecting development/test-device changes.
+- **Rationale:** Explicitly distinguishing ordinary execution from consequential approval boundaries reduces idle turns and ceremonial pauses without weakening repository publication, device-baseline, privilege, security, or physical-safety controls.
+
+## D-048 — Conditional fixed-purpose local power helper
+
+- **Status:** Accepted
+- **Date:** 2026-08-08
+- **Decision:** Homer first uses the operating system’s normal logind power interfaces when the stock policy authorizes the graphical-session user agent. If supported Bazzite or SteamOS configurations still require interactive authorization, Homer may offer a deliberate one-time local installation of an optional, removable, fixed-purpose privileged power helper. The helper has no network listener, accepts requests only through narrow local IPC from the normal-user agent, exposes only sleep, restart, shutdown, and required cancellation, and provides no shell or arbitrary-command path. Homer must not install a blanket polkit rule. If neither the stock interface nor the optional helper is available, the phone UI clearly disables or hides unavailable power actions rather than presenting a broken control.
+- **Rationale:** Phone confirmation alone cannot satisfy an operating-system authorization challenge, while per-use machine authentication defeats the couch-side workflow. A separate local allowlisted helper preserves a rootless network-facing agent and confines elevation more narrowly than weakening power authorization for every process owned by the desktop user.
+
+## D-049 — Qualified `.local` migration with direct-IP degraded operation
+
+- **Status:** Accepted
+- **Date:** 2026-08-08
+- **Decision:** Direct private IPv4 remains Homer’s first-contact path and a first-class visibly degraded operating mode. Homer migrates a phone credential to the stable random `.local` origin only when the supported platform/configuration is eligible for canonical migration and that phone validates the hostname in the relevant environment; a single Desktop Mode success must not override a known cross-mode failure. Homer does not retain duplicate durable credentials at both IP and `.local` origins. Configurations that fail qualification remain on the IP origin and warn that an address change can require local reconnection. Silent recovery or automatic requalification after a later mode transition is not required in v0.1.
+- **Rationale:** Origin-scoped browser credentials make an unreliable canonical hostname worse than a disclosed IP fallback, while retaining credentials at a recycled IP origin creates avoidable exposure. Qualification preserves convenient DHCP-resistant reconnection where it is reliable without stranding users on tested multicast-hostile configurations or weakening the accepted credential boundary.
