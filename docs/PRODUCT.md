@@ -169,6 +169,6 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 9. Which exact Decky recovery actions are safe enough for v0.2, and which permissions do they require on Bazzite and SteamOS?
 10. Which exact supported mobile browser versions pass encrypted-channel, IndexedDB, mDNS migration, and degraded direct-IP validation?
 11. What should the exact local-approval UX be when a new phone scans the QR code but the Steam UI is partially unhealthy?
-12. Does SteamOS require the D-051 power helper, and which implementation language, packaging, hardening, version-compatibility, installation, and removal details pass the helper release gate?
+12. Does SteamOS require the D-051/D-052 power helper, and which packaging, hardening, version-compatibility, installation, removal, lifecycle, rate-limit, and internal OS power-call details pass the helper release gate?
 13. What versioned packaging and compatibility contract keeps the independently updated agent and GitHub-delivered Decky plugin synchronized without allowing Homer to update Decky itself?
 14. What exact portable standalone installation, upgrade, uninstall, and state-location experience is validated for Bazzite and SteamOS?
