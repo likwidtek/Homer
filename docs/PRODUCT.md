@@ -95,6 +95,7 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 - SteamOS and Bazzite are required initial targets.
 - Begin hands-on testing on the project owner’s Bazzite machine, then validate SteamOS directly before making v0.1 compatibility claims.
 - Initial compatibility claims are limited to the tested Bazzite KDE Desktop Mode and Steam Gaming Mode configuration, and the tested current-stable Steam Deck/SteamOS configuration. Do not claim Bazzite GNOME, NVIDIA-specific behavior, other desktop environments, other hardware, or untested SteamOS variants until separately validated.
+- On the tested SteamOS Gaming Mode configuration, v0.1 does not claim scrolling support in Steam's system interface. Rootless relative movement and all three mouse buttons passed in Steam Library and a tested game, and scrolling passed in that game. Homer continues to send scroll input for compatible games and directs users to the Deck's normal controls when Steam-menu scrolling is needed.
 
 ## Explicit v0.1 non-goals
 

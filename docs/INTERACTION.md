@@ -33,6 +33,8 @@ The browser control surface provides a relative trackpad with:
 
 v0.1 excludes pinch/zoom, drag lock, sensitivity controls, additional gestures, and gamepad emulation.
 
+On the tested SteamOS Gaming Mode configuration, Homer continues to send two-finger scroll input for compatible games, but does not claim that scrolling works in Steam's system interface. The compatibility and help experience states this limitation once and points users to the Deck's normal controls for Steam-menu navigation; Homer does not repeatedly warn or disable scrolling that may work in a game.
+
 ## Clipboard
 
 Clipboard transfer is text-only. Phone-to-machine transfer is explicit through the text field or paste action.
