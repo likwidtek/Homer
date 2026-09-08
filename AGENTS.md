@@ -53,6 +53,7 @@ When the user signals a closeout:
 - Assess whether the objective is actually complete and report material gaps.
 - Run applicable closeout checks, update `docs/SESSION.md` when another task needs a handoff, and provide a concise copy/paste handoff that tells the receiving task to re-read `AGENTS.md`, `docs/PRODUCT.md`, `docs/DECISIONS.md`, `docs/SESSION.md`, the local operator file if present, and any task-routed documents.
 - Recommend one disposition: complete/archive, testing, waiting, blocked, or follow-on work.
+- End every material status, pause, blocker, or closeout with an explicit owner action: state whether the owner should continue here, paste a provided handoff into a named existing or new task, approve a named permanent action, wait for an external dependency, or take no action. If a handoff is needed, include the complete copy/paste prompt and say exactly where to put it. If a commit or push is needed, say so explicitly; if it is not authorized or not needed, say that explicitly.
 
 A closeout signal does not by itself authorize a commit, push, external message, task archive, or task rename; obtain explicit approval for each permanent or external action unless the current request already unambiguously grants it.
 

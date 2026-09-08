@@ -59,6 +59,8 @@ At a user-requested closeout, assess completion rather than assuming it. Report 
 
 A closeout signal alone does not authorize a commit, push, external message, task archive, or task rename. Obtain explicit approval for each such action unless the current user request already unambiguously grants it. Recommend whether the task should be archived as complete, retained for testing or waiting, marked blocked, or continued as follow-on work.
 
+Every material status, pause, blocker, and closeout must end with a concrete owner next step. Say whether the owner should continue in the current task, paste a provided handoff into a named task, approve a specific permanent action, wait for a named external dependency, or do nothing. When a handoff is appropriate, include its complete copy/paste text and identify its destination. State commit and push disposition explicitly: required and awaiting approval, already completed, deliberately not needed, or not authorized.
+
 ## Task and context transitions
 
 The assistant is responsible for telling the project owner when the current task remains the best context and when a task transition would improve clarity or reduce drift. Use these defaults:
