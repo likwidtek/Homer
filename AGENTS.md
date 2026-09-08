@@ -61,6 +61,14 @@ A closeout signal does not by itself authorize a commit, push, external message,
 
 Actively advise the user when work should remain in the current task, move to a branch of the current task, or start a fresh task with a handoff. Base that recommendation on workstream ownership, dependency boundaries, context drift, and the cost of carrying unrelated history. Do not interrupt a coherent workstream merely because it is long. Before a transition, identify the recommended destination, explain why it is useful, and preserve the current state through the handoff rules above.
 
+## Model-fit routing
+
+At the start of every task, after the required document reads, assess whether the task's current model and reasoning level fit the work's complexity, uncertainty, and consequence. Repeat the assessment when the work materially changes category, encounters repeated unexplained failure, crosses a security or privilege boundary, or enters final cross-system review. Do not repeat it mechanically on every turn.
+
+Use the least costly setting that can complete the work reliably, without underpowering security-sensitive, destructive, release-critical, or consequential architecture decisions. Apply any exact model ladder and standing switch authorization in `docs/private/OPERATOR.md`; keep personal subscription and model-budget preferences out of public files.
+
+When the current setting is materially mismatched and Codex exposes a confirmed task-local switching mechanism authorized by the operator policy, switch automatically and report the change once. If no such mechanism is available, or the requested tier remains approval-gated, stop before substantive work and tell the owner the current setting, the exact recommended setting, and the reason. Never claim that a model or reasoning level changed unless the platform confirms it. A handoff must recommend a model and reasoning level, but the receiving task must still perform its own check.
+
 ## Public repository safety
 
 `main` is the public source of truth. `docs/SESSION.md` and `docs/private/` are local-only and must never be committed or pushed. Before every push, follow `docs/PUBLISHING.md`, run the required preflight, and never use `git push --no-verify` to bypass it.
