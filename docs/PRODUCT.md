@@ -87,6 +87,7 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 - Paired phones must be revocable.
 - Future reconnection should use the paired device credential and local machine identity, not repeated QR scans or manually typed IP addresses.
 - v0.1 serves its browser interface over local HTTP/WebSockets under a trusted-LAN threat model, then protects all sensitive remote messages inside an authenticated application-layer encrypted channel derived from the QR bootstrap or paired-phone secret. This protects genuine-client payloads from passive observation but is not HTTPS-equivalent because an active LAN attacker can replace the HTTP-delivered browser code.
+- The validation-gated encrypted-channel candidate is Noise revision 34 `Noise_NNpsk0_25519_ChaChaPoly_BLAKE2s`, implemented once in a narrow Snow-based Rust core and delivered as prebuilt native Python and locally served browser-WebAssembly artifacts. It adds no root requirement, compiler, runtime dependency, certificate, PWA installation, or other user setup. Bearer headers and plaintext sensitive APIs are not part of this profile; production selection remains contingent on its security, interoperability, packaging, and physical-browser gates.
 - First pairing contact uses the current eligible private IPv4 address. Homer migrates to a stable random `.local` origin only after the supported configuration and phone qualify it as reliable; a known cross-mode failure prevents migration. Otherwise Homer operates in a clearly disclosed degraded direct-IP mode without retaining a duplicate credential at both origins.
 - Homer must tell users that they must never expose its port to the internet, including through port forwarding or automatic router exposure, and must not use Homer on public/shared Wi-Fi. The agent must not intentionally expose a public-internet listener.
 
@@ -165,7 +166,7 @@ This is a confirmed strategic direction for v0.2. The exact recovery actions, re
 4. What later multi-machine pairing and management experience should Homer support?
 5. What maximum text size and overflow behavior should clipboard transfer use?
 6. What exact first-run installation route will users without Decky follow, and what permissions will it require on Bazzite and SteamOS?
-7. Which reviewed pre-shared-key protocol pattern, pinned implementation, and browser build approach satisfy D-039’s test and review gates for the approved implementation languages?
+7. Does D-058's pinned Noise/Snow native-and-browser candidate pass the required build, security, interoperability, fuzzing, packaging, and physical-browser gates strongly enough for final production selection?
 8. Is Homer eligible for distribution through the official Decky store when its plugin bootstraps an independent service? This must be confirmed with Decky maintainers; public terms/policy were not located during initial research.
 9. Which exact Decky recovery actions are safe enough for v0.2, and which permissions do they require on Bazzite and SteamOS?
 10. Which exact supported mobile browser versions pass encrypted-channel, IndexedDB, mDNS migration, and degraded direct-IP validation?

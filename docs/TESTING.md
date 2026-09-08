@@ -79,21 +79,24 @@ D-054 lifecycle validation must use simulated dispatch and demonstrate a persist
 
 ## Track C — encrypted-channel selection
 
-Compare a narrowly wrapped, pinned Noise implementation suitable for native and WebAssembly builds with other maintained candidates that meet the same assurance bar. Analyze the proposed pairing and reconnection patterns before selecting them; `NNpsk0` is a candidate, not an accepted pattern.
+D-058 selects Noise revision 34 profile `Noise_NNpsk0_25519_ChaChaPoly_BLAKE2s` and one narrow Snow `0.10.0` Rust core as the validation candidate. Build it through PyO3 `0.29.2` for the Python agent boundary and wasm-bindgen `0.2.128` for locally served browser WebAssembly, using getrandom `0.3.4` with the `wasm_js` backend. Use Cacophony `0.11.0` at commit `8ee9d41e34a1a596cfa3ab12aa4069ff87dc1247` only as the unshipped independent interoperability oracle. This is not final production dependency approval.
 
 Validation must:
 
-- pin the protocol revision, complete protocol name, primitives, prologue, and Homer protocol version;
+- pin the locked dependency graph and the exact unambiguous prologue bytes for pairing, paired sessions, and target-origin-bound migration, including public selector, Homer transport version, purpose, and fixed roles;
 - establish the required authentication, freshness, forward-secrecy, channel-binding, and replay properties;
 - pass every applicable official vector;
 - prove native/browser interoperability and interoperability with at least one independent implementation;
+- verify empty encrypted handshake payloads, the typed `ClientReady`/`ServerReady` handshake-hash and role checks, the exact six-digit comparison-code derivation, and prohibition of all application effects before ready completion;
+- validate pending credential creation, successful IndexedDB commit/acknowledgment/activation, interrupted acknowledgment recovery that permits no other action, timeout cleanup, and absence of duplicate durable origin credentials;
 - reject replayed, reordered, duplicate, altered, truncated, oversized, wrong-version, wrong-state, and invalid-secret messages;
 - fuzz the exposed parser/state boundary without crashes, panics, deadlocks, permanent resource consumption, or sensitive diagnostic output;
 - enforce the ten-second unauthenticated WebSocket deadline;
+- verify one binary WebSocket message per Noise message, disabled compression, bounded message types, no bearer-header or plaintext sensitive fallback, and fresh-WebSocket re-handshake after 24 hours or before either directional `2^32` message limit;
 - load all executable browser assets locally; and
-- complete dependency, license, maintenance, unsafe-code, vulnerability, and manual review.
+- complete dependency, license, maintenance, unsafe-code, vulnerability, zeroization-residual, native-artifact, WebAssembly-artifact, reproducibility, and manual review.
 
-The candidate fails for any action performed after an authentication or integrity failure, any known unaddressed high- or critical-severity vulnerability, incompatible licensing, or an implementation too opaque or broad for meaningful review. A missing formal implementation audit is residual risk requiring explicit review; it is not silently treated as assurance.
+The candidate fails for any action before ready completion or after an authentication/integrity failure, any known unaddressed high- or critical-severity vulnerability, incompatible licensing, failed native or browser build, inability to interoperate with the pinned oracle, or an implementation too opaque or broad for meaningful review. Snow's missing formal audit and incomplete guaranteed internal-state zeroization are explicitly accepted candidate risks and must be reconsidered with the completed evidence before production selection; neither is silently treated as assurance.
 
 ## Track D — physical browser validation
 

@@ -6,7 +6,7 @@ This document records the accepted phone-control, clipboard, and power-action ex
 
 ## Pairing and trusted-network disclosure
 
-The user starts pairing locally in Decky. A pairing QR remains valid for five minutes and accepts one phone request. After scanning, the phone and Decky show the same six-digit comparison code; the local user has two minutes to approve or reject it. No code is typed, and a failed or expired attempt requires the user to start a new local pairing window.
+The user starts pairing locally in Decky. A pairing QR remains valid for five minutes and accepts one phone request. After the encrypted handshake and mutual ready confirmation, the phone and Decky show the same six-digit comparison code derived from that handshake; the local user has two minutes to approve or reject it. No code is typed. Pairing finishes only after the browser stores its new credential in IndexedDB and the agent confirms activation. A failed or expired attempt requires a new local pairing window unless a short-lived already-approved pending credential can finish only its interrupted storage activation.
 
 Decky first run and each new phone explain once that Homer is for a trusted home network, sensitive messages are encrypted after pairing, the browser interface itself is delivered over HTTP, and an active hostile network can defeat that protection. The user explicitly continues. The normal phone interface then keeps only a compact trusted-LAN status link.
 
